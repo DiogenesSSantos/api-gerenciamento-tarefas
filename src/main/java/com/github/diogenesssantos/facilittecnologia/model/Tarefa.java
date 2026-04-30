@@ -5,7 +5,10 @@ import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 @Getter
 @Entity
@@ -25,15 +28,20 @@ public class Tarefa {
     private Status status;
 
     @CreationTimestamp
-    private OffsetDateTime dataCriacao;
+    private Instant dataCriacao;
 
     @UpdateTimestamp
-    private OffsetDateTime dataAtualizacao;
+    private Instant  dataAtualizacao;
 
-    private OffsetDateTime dataLimite;
+    private Instant  dataLimite;
 
 
     private Tarefa(){}
 
 
+    public  OffsetDateTime getDataCriacao(){
+       return dataCriacao.atOffset(ZoneOffset.UTC)
+               .atZoneSameInstant(ZoneId.of("America/Sao_Paulo"))
+               .toOffsetDateTime();
+    }
 }
