@@ -164,9 +164,10 @@ public class Tarefa {
 
 
         public Builder dataLimite(Instant dataLimite) {
-            if (ValidaHoraUtil.isPassado(dataLimite)) {
+            if (dataLimite == null) {
                 throw new IllegalArgumentException("O campo dataLimite deve ser em um periodo no tempo futuro.");
-            }
+            } else if (ValidaHoraUtil.isPassado(dataLimite))
+                throw new IllegalArgumentException("O campo dataLimite deve ser em um periodo no tempo futuro.");
 
             this.dataLimite = dataLimite;
             return this;
