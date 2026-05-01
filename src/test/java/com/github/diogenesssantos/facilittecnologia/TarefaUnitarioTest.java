@@ -20,7 +20,7 @@ class TarefaUnitarioTest {
     void configuracao() {
         mocktarefa = new Tarefa.Builder().
                 titulo("Tarefa teste").
-                descricao("Criando tarefa teste").
+                descricao("Estágio facilit").
                 responsavel("Diogenes da Silva Santos").
                 status(Status.FAZER).
                 dataCriacao(Instant.now()).
@@ -53,7 +53,7 @@ class TarefaUnitarioTest {
             assertThrows(IllegalArgumentException.class, () -> {
                 new Tarefa.Builder().
                         titulo("     ").
-                        descricao("Criando tarefa teste").
+                        descricao("Estágio Facilit").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
                         dataCriacao(Instant.now()).
@@ -65,7 +65,7 @@ class TarefaUnitarioTest {
             assertThrows(IllegalArgumentException.class, () -> {
                 new Tarefa.Builder().
                         titulo(null).
-                        descricao("Criando tarefa teste").
+                        descricao("Estágio Facilit").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
                         dataCriacao(Instant.now()).
@@ -82,7 +82,7 @@ class TarefaUnitarioTest {
         assertAll(() -> {
             assertThrows(IllegalArgumentException.class, () -> {
                 new Tarefa.Builder().
-                        titulo("Teste titulo").
+                        titulo("Tarefa Facilit").
                         descricao("   ").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
@@ -94,7 +94,7 @@ class TarefaUnitarioTest {
 
             assertThrows(IllegalArgumentException.class, () -> {
                 new Tarefa.Builder().
-                        titulo("Teste titulo").
+                        titulo("Tarefa Facilit").
                         descricao(null).
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
@@ -112,20 +112,20 @@ class TarefaUnitarioTest {
         assertAll(() -> {
             assertThrows(IllegalArgumentException.class, () -> {
                 new Tarefa.Builder().
-                        titulo("Teste titulo").
-                        descricao("Teste estágio facilit").
+                        titulo("Tarefa Facilit").
+                        descricao("Estágio Facilit").
                         responsavel("   ").
                         status(Status.FAZER).
                         dataCriacao(Instant.now()).
                         dataAtualizacao(Instant.now()).
                         dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
                         .build();
-            }, () -> "Espereva um campo vázio, mas obteve outro valor.");
+            }, () -> "Esperava um campo vázio, mas obteve outro valor.");
 
             assertThrows(IllegalArgumentException.class, () -> {
                 new Tarefa.Builder().
-                        titulo("Teste titulo").
-                        descricao("Teste estágio facilit").
+                        titulo("Tarefa Facilit").
+                        descricao("Estágio Facilit").
                         responsavel(null).
                         status(Status.FAZER).
                         dataCriacao(Instant.now()).
@@ -141,30 +141,30 @@ class TarefaUnitarioTest {
     void deveLancarIllegalArgumentException_QuandoUmaTarefaComOCampoStatusNulo() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Tarefa.Builder().
-                    titulo("Teste titulo").
-                    descricao("Teste estágio facilit").
+                    titulo("Tarefa Facilit").
+                    descricao("Estágio facilit").
                     responsavel("Diogenes da Silva Santos").
                     status(null).
                     dataCriacao(Instant.now()).
                     dataAtualizacao(Instant.now()).
                     dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
                     .build();
-        }, () -> "Espereva um campo null, mas obteve outro valor.");
+        }, () -> "Esperava um campo null, mas obteve outro valor.");
     }
 
     @Test
     void deveLancarIllegalArgumentException_QuandoUmaTarefaComOCampoDataCriacaoNulo() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Tarefa.Builder().
-                    titulo("Teste titulo").
-                    descricao("Teste estágio facilit").
+                    titulo("Tarefa Facilit").
+                    descricao("Estágio facilit").
                     responsavel("Diogenes da Silva Santos").
                     status(Status.FAZER).
                     dataCriacao(null).
                     dataAtualizacao(Instant.now()).
                     dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
                     .build();
-        }, () -> "Espereva um campo null, mas obteve outro valor.");
+        }, () -> "Esperava um campo null, mas obteve outro valor.");
     }
 
 
@@ -172,15 +172,15 @@ class TarefaUnitarioTest {
     void deveLancarIllegalArgumentException_QuandoUmaTarefaComOCampoDataAtualizacaoNulo() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Tarefa.Builder().
-                    titulo("Teste titulo").
-                    descricao("Teste estágio facilit").
+                    titulo("Tarefa Facilit").
+                    descricao("Estágio Facilit").
                     responsavel("Diogenes da Silva Santos").
                     status(Status.FAZER).
                     dataCriacao(Instant.now()).
                     dataAtualizacao(null).
                     dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
                     .build();
-        }, () -> "Espereva um campo null, mas obteve outro valor.");
+        }, () -> "Esperava um campo null, mas obteve outro valor.");
     }
 
 
@@ -190,27 +190,27 @@ class TarefaUnitarioTest {
         assertAll(() -> {
             assertThrows(IllegalArgumentException.class, () -> {
                 new Tarefa.Builder().
-                        titulo("Teste titulo").
-                        descricao("Teste estágio facilit").
+                        titulo("Tarefa Facilit").
+                        descricao("Estágio facilit").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
                         dataCriacao(Instant.now()).
                         dataAtualizacao(Instant.now()).
                         dataLimite(null)
                         .build();
-            }, () -> "Espereva um campo null, mas obteve outro valor.");
+            }, () -> "Esperava um campo null, mas obteve outro valor.");
         }, () -> {
             assertThrows(IllegalArgumentException.class, () -> {
                 new Tarefa.Builder().
-                        titulo("Teste titulo").
-                        descricao("Teste estágio facilit").
+                        titulo("Tarefa Facilit").
+                        descricao("Estágio Facilit").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
                         dataCriacao(Instant.now()).
                         dataAtualizacao(Instant.now()).
                         dataLimite(Instant.now().minus(2, ChronoUnit.MINUTES))
                         .build();
-            }, () -> "Espereva um campo dataLimite no passado, mas obteve com valor.");
+            }, () -> "Esperava um campo dataLimite no passado, mas obteve com valor.");
         });
     }
 
