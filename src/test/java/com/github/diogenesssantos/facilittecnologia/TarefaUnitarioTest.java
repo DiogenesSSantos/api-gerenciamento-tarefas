@@ -46,6 +46,7 @@ class TarefaUnitarioTest {
 
     }
 
+
     @Test
     void deveLancarIllegalArgumentException_QuandoCriarUmaTarefaComOcampoTituloNullOuVazio() {
 
@@ -76,6 +77,7 @@ class TarefaUnitarioTest {
         });
     }
 
+
     @Test
     void deveLancarIllegalArgumentException_QuandoUmaTarefaComOCampoDescricaoNuloOuVazio() {
 
@@ -105,6 +107,7 @@ class TarefaUnitarioTest {
             }, () -> "Esperava um campo null, mas obteve outro resultado.");
         });
     }
+
 
     @Test
     void deveLancarIllegalArgumentException_QuandoUmaTarefaComOCampoResponsavelNuloOuVazio() {
@@ -151,6 +154,7 @@ class TarefaUnitarioTest {
                     .build();
         }, () -> "Esperava um campo null, mas obteve outro valor.");
     }
+
 
     @Test
     void deveLancarIllegalArgumentException_QuandoUmaTarefaComOCampoDataCriacaoNulo() {
