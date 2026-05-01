@@ -9,7 +9,7 @@ import java.time.Instant;
 public class ValidaHoraUtil {
 
     public static boolean isPassado(Instant data) {
-        return data.isAfter(Instant.now());
+        return data.isBefore(Instant.now());
     }
 
 }
