@@ -51,6 +51,12 @@ public class TarefaService {
         return salvar(tarefa);
     }
 
+    @Transactional
+    public Tarefa atualizarPorDescricao(String descricao, Tarefa tarefaAtualizada) {
+        var tarefa = buscarPorDescricao(descricao);
+        atualizarCampos(tarefa, tarefaAtualizada);
+        return salvar(tarefa);
+    }
 
     private void atualizarCampos(Tarefa tarefaAtual, Tarefa tarefaAtualizada) {
         tarefaAtual.setTitulo(tarefaAtualizada.getTitulo());
@@ -60,5 +66,4 @@ public class TarefaService {
         tarefaAtual.setDataAtualizacao(Instant.now());
         tarefaAtual.setDataLimite(tarefaAtualizada.getDataLimite());
     }
-
 }
