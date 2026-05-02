@@ -17,6 +17,8 @@ import static org.mockito.BDDMockito.*;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
@@ -129,29 +131,29 @@ public class TarefaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar 2 tarefas, quando buscar por título Facilit")
+    @DisplayName("Deve retornar uma Tarefa, quando buscar por título correlacionarem.")
     void deveRetornarListTarefaQuandoTituloCorrelacionado() {
         var tituloExpectativa = "Facilit";
-        var quantidadeExpectativa = 2;
 
         given(mockRepository.buscarPorTitulo(any(String.class)))
                 .willAnswer(invocation -> {
                     String tituloConsulta = invocation.getArgument(0);
 
-                    return mockListTarefas
+                    List<Tarefa> list = mockListTarefas
                             .stream()
-                            .filter(tarefa -> tarefa.getTitulo().toUpperCase()
-                                    .startsWith(tituloConsulta.toUpperCase()))
+                            .filter(tarefa -> tarefa.getTitulo().equalsIgnoreCase(tituloConsulta))
+                            .limit(1)
                             .toList();
+
+                    return list.isEmpty() ? Optional.empty() : Optional.of(list.getFirst());
                 });
 
-        var listTarefa = mockService.buscarPorTitulo(tituloExpectativa);
+        Tarefa tarefa = mockService.buscarPorTitulo(tituloExpectativa);
 
         then(mockRepository)
                 .should().buscarPorTitulo(any(String.class));
-
-        assertNotNull(listTarefa);
-        assertEquals(quantidadeExpectativa, listTarefa.size());
+        assertNotNull(tarefa);
+        assertEquals(tituloExpectativa, tarefa.getTitulo());
     }
 
     @Test
@@ -160,33 +162,35 @@ public class TarefaServiceTest {
         String expectativaTituloNulo = null;
         assertThrows(IllegalArgumentException.class,
                 () -> mockService.buscarPorTitulo(expectativaTituloNulo),
-                ()-> "Execução foi um sucesso, e se esperava uma exception IllegalArgumentException.");
+                () -> "Execução foi um sucesso, e se esperava uma exception IllegalArgumentException.");
     }
 
     @Test
-    @DisplayName("Deve retornar uma lista de tarefa, quando buscar por descrição Apreender.")
+    @DisplayName("Deve retornar uma tarefa, quando buscar por descrição correlacionarem.")
     void deveRetornarListTarefaQuandoDescricaoCorrelacionado() {
-        var tituloExpectativa = "Aprender";
+        var descricaoExpectativa = "Aprender react-native";
 
         given(mockRepository.buscarPorDescricao(any(String.class)))
                 .willAnswer(invocation -> {
-                    String descricaoConsulta = invocation.getArgument(0);
+                    String tituloConsulta = invocation.getArgument(0);
 
-                    return mockListTarefas
+                    List<Tarefa> list = mockListTarefas
                             .stream()
-                            .filter(tarefa -> tarefa.getDescricao().toUpperCase()
-                                    .startsWith(descricaoConsulta.toUpperCase()))
+                            .filter(tarefa -> tarefa.getDescricao().equalsIgnoreCase(tituloConsulta))
+                            .limit(1)
                             .toList();
+
+                    return list.isEmpty() ? Optional.empty() : Optional.of(list.getFirst());
                 });
 
-        var listTarefa = mockService.buscarPorDescricao(tituloExpectativa);
+        Tarefa tarefaAtual = mockService.buscarPorDescricao(descricaoExpectativa);
 
         then(mockRepository)
                 .should().buscarPorDescricao(any(String.class));
 
-        assertNotNull(listTarefa);
-        assertFalse(listTarefa.isEmpty());
-        assertTrue(listTarefa.getFirst().getDescricao().contains(tituloExpectativa));
+        assertNotNull(tarefaAtual);
+        assertEquals(descricaoExpectativa, tarefaAtual.getDescricao());
+
     }
 
     @Test
@@ -199,6 +203,45 @@ public class TarefaServiceTest {
     }
 
 
+    @Test
+    @DisplayName("Deve atualizar uma tarefa, Quando atualizar campos parcial")
+    void deveAtualizarTarefaQuandoTodosOsCamposForemValidos() {
+        var tituloExpectativa = "Facilit";
+        var atualizandoTituloExpectativa = "Facilit estágio";
+
+        Tarefa tarefaExistente = getTarefaMock();
+        Tarefa tarefaAtualizacao = new Tarefa.Builder()
+                .titulo(atualizandoTituloExpectativa)
+                .descricao(tarefaExistente.getDescricao())
+                .responsavel(tarefaExistente.getResponsavel())
+                .status(tarefaExistente.getStatus())
+                .dataCriacao(tarefaExistente.getDataCriacao())
+                .dataAtualizacao(Instant.now())
+                .dataLimite(tarefaExistente.getDataLimite())
+                .build();
+
+        given(mockRepository.buscarPorTitulo(any(String.class)))
+                .willReturn(Optional.of(tarefaExistente));
+
+        given(mockRepository.save(any(Tarefa.class)))
+                .willAnswer(invocation -> {
+                    Tarefa recebido = invocation.getArgument(0);
+                    recebido.setId(123L);
+                    return recebido;
+                });
+
+        var tarefaAtualizada = mockService.atualizarPorTitulo(tituloExpectativa, tarefaAtualizacao);
+
+        then(mockRepository).should().buscarPorTitulo(eq(tituloExpectativa));
+        then(mockRepository).should().save(any(Tarefa.class));
+        assertNotNull(tarefaAtualizada);
+        assertNotNull(tarefaAtualizada.getId());
+        assertEquals(atualizandoTituloExpectativa, tarefaAtualizada.getTitulo());
+    }
+
+    private Tarefa getTarefaMock() {
+        return mockListTarefas.getFirst();
+    }
 
 
 }
