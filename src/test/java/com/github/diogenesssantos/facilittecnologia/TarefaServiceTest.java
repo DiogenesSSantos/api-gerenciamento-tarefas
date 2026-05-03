@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.mockito.BDDMockito.*;
 
-
 @TestInstance(PER_CLASS)
 @ExtendWith(MockitoExtension.class)
 public class TarefaServiceTest {
@@ -61,7 +60,7 @@ public class TarefaServiceTest {
                         titulo("Facilit estágio").
                         descricao("Aprender react-native").
                         responsavel("Diogenes da Silva Santos").
-                        status(Status.FAZER).
+                        status(Status.PROGRESSO).
                         dataCriacao(Instant.now()).
                         dataAtualizacao(Instant.now()).
                         dataLimite(Instant.now().plus(22, ChronoUnit.DAYS))
@@ -72,8 +71,8 @@ public class TarefaServiceTest {
 
 
     @Test
-    @DisplayName("Deve retornar uma list com 3 tarefa, quando chamar o método buscar todas.")
-    void deveRetornarListaDeTarefasQuandoChamarOMetodoBuscarTodasComTotalDe3Tarefas() {
+    @DisplayName("Deve retornar uma list com 3 Tarefa, quando chamar o método buscarTodas.")
+    void deve_Retornar_Lista_De_Tarefas_Quando_BuscarTodas() {
         given(mockRepository.findAll()).willReturn(mockListTarefas);
         int expectativaQuantidadeTarefas = 3;
 
@@ -87,8 +86,9 @@ public class TarefaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar uma list de tarefa vázia [], quando não existir tarefa no banco de dados.")
-    void deveRetornarListTarefasVaziaQuandoChamarOMetodoBuscarTodas() {
+    @DisplayName("Deve retornar uma list de tarefa vázia []," +
+            " quando chamar o método buscarTodas e não existir nenhuma tarefa no banco de dados.")
+    void deve_Retornar_List_Tarefas_Vazia_Quando_BuscarTodas() {
         given(mockRepository.findAll()).willReturn(List.of());
 
         var listaTarefasBD = mockService.buscarTodas();
@@ -101,9 +101,10 @@ public class TarefaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar a tarefa, " +
-            "quando ela for persistida com o método salvar, e ela tem que possuir um ID após retorno.")
-    void deve_Retornar_A_Tarefa_Com_Id_Quando_Criar_Uma_TarefaValida() {
+    @DisplayName("Deve retornar uma tarefa, " +
+            "quando chamar o método salvar e todos os campos estejam validos, " +
+            "e a tarefa retornada tem que possuir um ID.")
+    void deve_Retornar_A_Tarefa_Salva_Com_Id_Quando_Salvar_Uma_Tarefa_Valida() {
         var idExpectativa = 1L;
         Tarefa tarefaCriadaExpectativa = new Tarefa.Builder().
                 titulo("Tarefa teste").
@@ -132,9 +133,93 @@ public class TarefaServiceTest {
 
     }
 
+
     @Test
-    @DisplayName("Deve retornar uma tarefa, quando chamar o método buscar por título correlacionarem.")
-    void deve_Retornar_Uma_Tarefa_Quando_O_Titulo_Correlacionarem() {
+    @DisplayName("Deve retornar uma tarefa, quando chamar o método buscarPorId" +
+            "e o parâmetro id correlacionar a uma tarefa no banco de dados.")
+    void deve_Retornar_Uma_Tarefa_Quando_BuscarPorId_E_O_id_exista_no_Banco_De_Dados() {
+        var idValidoExpectativa = 1L;
+
+        given(mockRepository.findById(any(Long.class)))
+                .willAnswer(invocation -> {
+                    Long mockIdTarefa = invocation.getArgument(0);
+                    var mockTarefa = getTarefaMock();
+                    mockTarefa.setId(mockIdTarefa);
+
+                    return Optional.of(mockTarefa);
+                });
+
+        var tarefaBd = mockService.buscarPorId(idValidoExpectativa);
+
+        then(mockRepository).should().findById(any(Long.class));
+        assertNotNull(tarefaBd);
+        assertEquals(idValidoExpectativa, tarefaBd.getId());
+
+    }
+
+
+    @Test
+    @DisplayName("Deve lançar um TarefaNotFound, quando chamar o método buscarPorId" +
+            "e o parâmetro id não correlacionar a uma tarefa no banco de dados.")
+    void deve_Lancar_TarefaNotFoundException_Quando_BuscarPorId_E_O_Id_Nao_Existir_no_Banco_De_Dados() {
+        var idValidoExpectativa = 1L;
+
+        given(mockRepository.findById(any(Long.class)))
+                .willAnswer(invocation -> {
+                    return Optional.empty();
+                });
+
+        assertThrows(TarefaNotFoundException.class,
+                () -> mockService.buscarPorId(idValidoExpectativa),
+                () -> "Esperava-se um TarefaNotFoundException, mas gerou outro resultado.");
+
+        then(mockRepository).should().findById(any(Long.class));
+    }
+
+
+    @Test
+    @DisplayName("Deve lançar um IllegalArgumentException, quando chamar o método buscarPorId" +
+            "e o parâmetro id for null.")
+    void deve_Lancar_IllegalArgumentException_Quando_BuscarPorId_E_O_Id_Seja_Null() {
+        Long idValidoExpectativa = null;
+
+        assertThrows(IllegalArgumentException.class,
+                () -> mockService.buscarPorId(idValidoExpectativa),
+                () -> "Esperava-se um TarefaNotFoundException, mas gerou outro resultado.");
+
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar uma tarefa com status atualizado, quando chamar o método atualizarPorId" +
+            "e o parâmetro id correlacionar a uma tarefa no banco de dados.")
+    void deve_Retornar_Uma_Tarefa_Com_Status_Atualizado_Quando_atualizarStatusPorId_E_O_id_exista_no_Banco_De_Dados() {
+        var idValidoExpectativa = 1L;
+        var statusExpectativa = Status.CONCLUIDO;
+
+        given(mockRepository.findById(any(Long.class)))
+                .willReturn(Optional.of(mockListTarefas.getFirst()));
+
+        given(mockRepository.save(any(Tarefa.class)))
+                .willAnswer(invocation -> {
+                    Tarefa mockTarefa = invocation.getArgument(0);
+                    return mockTarefa;
+                });
+
+        var tarefaBD = mockService.AtualizarStatusPorId(idValidoExpectativa, statusExpectativa);
+
+        then(mockRepository).should().findById(any(Long.class));
+        then(mockRepository).should().save(any(Tarefa.class));
+        assertNotNull(tarefaBD);
+        assertEquals(statusExpectativa,tarefaBD.getStatus());
+    }
+
+
+
+    @Test
+    @DisplayName("Deve retornar uma tarefa, quando chamar o método buscarPorTítulo" +
+            " e o parâmetro titulo correlacionar a uma tarefa no banco de dados.")
+    void deve_Retornar_Uma_Tarefa_Quando_BuscarPorTitulo_O_Titulo_Correlacionarem() {
         var tituloExpectativa = "Facilit";
 
         given(mockRepository.buscarPorTitulo(any(String.class)))
@@ -159,9 +244,9 @@ public class TarefaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve lançar uma exception TarefaNotFoundException, quando chamar o método buscar por titulo" +
-            "passando como parâmetro um titulo que não exista no banco de dados.")
-    void deve_Lancar_TarefaNotFoundException_Quando_BuscarComTitulo_O_TituloNaoExistir() {
+    @DisplayName("Deve lançar uma exception TarefaNotFoundException, quando chamar o método buscarPorTitulo" +
+            "passando como parâmetro um titulo que não correlacione a uma Tarefa no banco de dados.")
+    void deve_Lancar_TarefaNotFoundException_Quando_BuscarComTitulo_E_O_Titulo_Nao_Existir_Uma_Tarefa_Correlacionada() {
         var tituloNaoExistente = "Testando titulo invalido";
         var msgExceptionExpectativa = String.format("Tarefa com  o titulo [%s] não existe.", tituloNaoExistente);
 
@@ -179,9 +264,9 @@ public class TarefaServiceTest {
 
 
     @Test
-    @DisplayName("Deve lançar a exception IllegalArgumentException, quando chamar o método buscar por titulo" +
-            "e o parâmetro for null.")
-    void deveLancarIllegalArgumentExceptionQuandoBuscarComTituloNulo() {
+    @DisplayName("Deve lançar a exception IllegalArgumentException, quando chamar o método buscarPorTitulo" +
+            "e o parâmetro titulo for null.")
+    void deve_Lancar_IllegalArgumentException_Quando_BuscarComTitulo_O_Titulo_For_Null() {
         String expectativaTituloNulo = null;
         assertThrows(IllegalArgumentException.class,
                 () -> mockService.buscarPorTitulo(expectativaTituloNulo),
@@ -189,9 +274,10 @@ public class TarefaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve atualizar uma tarefa, " +
-            "quando chamar o método atualizar por titulo e todos campos estejam validos.")
-    void deve_Atualizar_Tarefa_Quando_Chamar_Metodo_Atualizar_Por_Titulo_E_Todos_Os_Campos_Forem_Validos() {
+    @DisplayName("Deve retornar uma tarefa atualizada, " +
+            "quando chamar o método atualizarPorTitulo e o titulo correlacionar a uma uma tarefa existente" +
+            "no banco de dados, e também todos os campos estejam válidos.")
+    void deve_Retornar_A_Tarefa_Atualizada_Quando_AtualizarPorTitulo_E_Todos_Os_Campos_Estejam_Validos() {
         var tituloExpectativa = "Facilit";
         var atualizandoTituloExpectativa = "Facilit estágio";
 
@@ -227,9 +313,9 @@ public class TarefaServiceTest {
 
 
     @Test
-    @DisplayName("Deve lançar a exception TarefaNotFound, quando chamar o método atualizar por titulo e a tarefa" +
-            "não existir no banco de dados.")
-    void deve_Lancar_TarefaNotFound_Quando_For_Atualizar_Uma_Tarefa_Com_Um_Titulo_Que_Nao_Existe_No_Banco_De_Dados() {
+    @DisplayName("Deve lançar a exception TarefaNotFound, quando chamar o método atualizarPorTitulo" +
+            " e o parâmetro titulo não correlacionem a uma tarefa no banco de dados.")
+    void deve_Lancar_TarefaNotFound_Quando_AtualizarPorTitulo_O_Titulo_Nao_Correlacionar_A_Uma_Tarefa() {
         var tituloExpectativa = "Não existe titulo";
         var atualizandoTituloExpectativa = "Facilit estágio";
 
@@ -259,8 +345,9 @@ public class TarefaServiceTest {
 
 
     @Test
-    @DisplayName("Deve retornar uma tarefa, quando chamar o método buscar por descrição correlacionarem.")
-    void deveRetornarListTarefaQuandoDescricaoCorrelacionado() {
+    @DisplayName("Deve retornar uma tarefa, quando chamar o método buscarPordescricao " +
+            "e o parâmetro descrição correlacione a uma tarefa no banco de dados.")
+    void deve_Retornar_A_Tarefa_Quando_BuscarPorDescricao_A_Descricao_Correlacionarem() {
         var descricaoExpectativa = "Aprender react-native";
 
         given(mockRepository.buscarPorDescricao(any(String.class)))
@@ -287,9 +374,10 @@ public class TarefaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve atualizar uma tarefa, " +
-            "quando chamar o método atualizar por descrição e todos campos estejam validos.")
-    void deve_Atualizar_Tarefa_Quando_Chamar_Metodo_Atualizar_Por_Descricao_E_Todos_Os_Campos_Forem_Validos() {
+    @DisplayName("Deve retornar uma tarefa atualizada, " +
+            "quando chamar o método atualizarPorDescricao e a descrição correlacionar a uma uma tarefa existente" +
+            "no banco de dados, e também todos os campos estejam válidos.")
+    void deve_Retornar_Uma_Tarefa_Atualizada_Quando_AtualizarPorDescricao_E_Todos_Os_Campos_estejam_Validos() {
         var descricaoExpectativa = "Facilit";
         var atualizandoDescricaoExpectativa = "Mudando a descrição da tarefa";
 
@@ -325,10 +413,10 @@ public class TarefaServiceTest {
 
 
     @Test
-    @DisplayName("Deve lançar a exception TarefaNotFound, quando chamar o método atualizar por descrição e a tarefa" +
-            "não existir no banco de dados.")
-    void deve_Lancar_TarefaNotFound_Quando_For_Atualizar_Uma_Tarefa_Com_Um_Descriaco_Que_Nao_Existe_No_Banco_De_Dados() {
-        var descricaoExpectativa = "Não existe descrição";
+    @DisplayName("Deve lançar a exception TarefaNotFound, quando chamar o método atualizarPorDescricao " +
+            " e descrição não correlacionar a nenhuma tarefa no banco de dados.")
+    void deve_Lancar_TarefaNotFound_Quando_AtualizarPorDescricao_E_A_Tarefa_Nao_Existe_No_Banco_De_Dados() {
+        var descricaoExpectativa = "Não existe essa descrição correlacionada a uma tarefa";
         var atualizandoDescricaoExpectativa = "Facilit estágio";
 
         Tarefa tarefaExistente = getTarefaMock();
@@ -353,9 +441,9 @@ public class TarefaServiceTest {
 
 
     @Test
-    @DisplayName("Deve lançar a exception IllegalArgumentException, quando chamar o método buscar por descrição " +
-            "e o parâmetro for null.")
-    void deveLancarIllegalArgumentExceptionQuandoBuscarComDescricaoNulo() {
+    @DisplayName("Deve lançar a exception IllegalArgumentException, quando chamar o método buscarPorDescricao " +
+            "e o parâmetro descrição for null.")
+    void deve_Lancar_IllegalArgumentException_Quando_BuscarComDescricao_O_Parametro_Descricao_Null() {
         String expectativaDescricaoNulo = null;
         assertThrows(IllegalArgumentException.class,
                 () -> mockService.buscarPorDescricao(expectativaDescricaoNulo),
@@ -363,7 +451,116 @@ public class TarefaServiceTest {
     }
 
 
+    @Test
+    @DisplayName("Deve retornar uma list de Tarefa, quando chamar o método buscarPorStatus" +
+            " e o parâmetro status se correlacionarem.")
+    void deve_Retornar_Uma_Lista_De_Tarefas_Quando_buscarPorStatus_Que_Correlacionem() {
+        var statusAFazerExpectativa = Status.FAZER;
+
+
+        given(mockRepository.buscarPorStatus(any(Status.class)))
+                .willAnswer(invocation -> {
+                    Status statusParametro = invocation.getArgument(0);
+
+                    return mockListTarefas.stream()
+                            .filter(tarefa -> tarefa.getStatus().equals(statusParametro))
+                            .toList();
+                });
+
+
+        var listaTarefaAFazerBD = mockService.buscarPorStatus(statusAFazerExpectativa);
+
+        then(mockRepository).should().buscarPorStatus(any(Status.class));
+        assertNotNull(listaTarefaAFazerBD);
+        assertFalse(listaTarefaAFazerBD.isEmpty());
+
+    }
+
+    @Test
+    @DisplayName("Deve retornar uma list de Tarefa vázia [], quando chamar o método buscarPorStatus" +
+            " passando como parâmetro um status que não exista Tarefa correspondentes no banco de dados.")
+    void deve_Retornar_Uma_Lista_De_Tarefas_Vazia_Quando_buscarPorStatus_Nao_Existir_O_Status_No_Banco_De_Dados() {
+        var statusAFazerExpectativa = Status.CONCLUIDO;
+
+        given(mockRepository.buscarPorStatus(any(Status.class)))
+                .willAnswer(invocation -> {
+                    Status statusParametro = invocation.getArgument(0);
+
+                    return mockListTarefas.stream()
+                            .filter(tarefa -> tarefa.getStatus().equals(statusParametro))
+                            .toList();
+                });
+
+        var listaTarefaAFazerBD = mockService.buscarPorStatus(statusAFazerExpectativa);
+
+        then(mockRepository).should().buscarPorStatus(any(Status.class));
+        assertNotNull(listaTarefaAFazerBD);
+        assertTrue(listaTarefaAFazerBD.isEmpty());
+
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar uma Tarefa com status atualizado, " +
+            "quando chamar o método atualizarStatus e os parâmetros status e titulo estiverem válidos.")
+    void deve_Retornar_Uma_Tarefa_Com_Status_Atualizado_Quando_AtualizarStatus_PorTitulo_Os_Parametros_Estejam_Validos() {
+        var tituloExpextativa = "Facilit";
+        var statusExpectativa = Status.PROGRESSO;
+
+
+        given(mockRepository.buscarPorTitulo(any(String.class)))
+                .willReturn(Optional.of(mockListTarefas.get(1)));
+
+        given(mockRepository.save(any(Tarefa.class))).willAnswer(invocation -> {
+            var mockTarefa = invocation.getArgument(0);
+            return mockTarefa;
+        });
+
+
+        var tarefaBD = mockService.atualizarStatusPorTitulo(tituloExpextativa, statusExpectativa);
+
+        then(mockRepository).should().buscarPorTitulo(any(String.class));
+        then(mockRepository).should().save(any(Tarefa.class));
+        assertNotNull(tarefaBD);
+        assertEquals(tituloExpextativa, tarefaBD.getTitulo());
+        assertEquals(statusExpectativa, tarefaBD.getStatus());
+
+    }
+
+
+    @Test
+    @DisplayName("Deve lançar IllegalArgumentException, " +
+            "quando chamar o método atualizarStatus e o parâmetro titulo for null.")
+    void deve_Lancar_IllegalArgumentException_Quando_AtualizarStatus_PorTitulo_O_Titulo_Null() {
+        String tituloNaoExisteExpectativa = null;
+        var statusExpectativa = Status.PROGRESSO;
+
+        assertThrows(IllegalArgumentException.class, () ->
+                mockService.atualizarStatusPorTitulo(tituloNaoExisteExpectativa, statusExpectativa));
+
+    }
+
+
+    @Test
+    @DisplayName("Deve lançar TarefaNotFoundException, " +
+            "quando chamar o método atualizarStatus e o parâmetro titulo não correlacionar a uma Tarefa.")
+    void deve_Lancar_TarefaNotFoundException_Quando_AtualizarStatus_PorTitulo_O_Titulo_Nao_Correlacionar_A_Uma_Tarefa() {
+        String tituloNaoExisteExpectativa = "Facilit não existe BD";
+        var statusExpectativa = Status.PROGRESSO;
+
+        given(mockRepository.buscarPorTitulo(any(String.class)))
+                .willReturn(Optional.empty());
+
+        assertThrows(TarefaNotFoundException.class, () ->
+                mockService.atualizarStatusPorTitulo(tituloNaoExisteExpectativa, statusExpectativa));
+
+        then(mockRepository).should().buscarPorTitulo(any(String.class));
+
+    }
+
+
     private Tarefa getTarefaMock() {
         return mockListTarefas.getFirst();
     }
 }
+

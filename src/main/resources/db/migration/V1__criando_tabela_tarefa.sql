@@ -1,6 +1,3 @@
-
-
-
 CREATE TABLE tb_tarefa(
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(250) NOT NULL,

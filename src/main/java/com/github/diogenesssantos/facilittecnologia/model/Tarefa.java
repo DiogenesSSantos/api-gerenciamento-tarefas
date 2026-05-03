@@ -4,7 +4,6 @@ import com.github.diogenesssantos.facilittecnologia.exceptionhandller.exception.
 import com.github.diogenesssantos.facilittecnologia.util.ValidaHoraUtil;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,7 +11,7 @@ import java.time.Instant;
 
 @Data
 @Entity
-@Table(schema = "tb_tarefa")
+@Table(name = "tb_tarefa")
 public class Tarefa {
 
     @Id

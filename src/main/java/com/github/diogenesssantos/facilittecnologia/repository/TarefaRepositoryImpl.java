@@ -1,7 +1,9 @@
 package com.github.diogenesssantos.facilittecnologia.repository;
 
+import com.github.diogenesssantos.facilittecnologia.model.Status;
 import com.github.diogenesssantos.facilittecnologia.model.Tarefa;
 
+import java.util.List;
 import java.util.Optional;
 
 public class TarefaRepositoryImpl implements TarefaRepositoryCustom{
@@ -19,5 +21,11 @@ public class TarefaRepositoryImpl implements TarefaRepositoryCustom{
         //todo implementar buscar por titulo
         return null;
     }
+
+    @Override
+    public List<Tarefa> buscarPorStatus(Status status) {
+        return List.of();
+    }
+
 
 }
