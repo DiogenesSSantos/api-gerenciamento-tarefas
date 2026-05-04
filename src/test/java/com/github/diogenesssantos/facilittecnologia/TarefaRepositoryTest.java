@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,9 +39,9 @@ public class TarefaRepositoryTest {
                 descricao("Teste a classe tarefaRepository e todos os seus métodos").
                 responsavel("Diogenes da Silva Santos").
                 status(Status.FAZER).
-                dataCriacao(Instant.now()).
-                dataAtualizacao(Instant.now()).
-                dataLimite(Instant.now().plus(5, ChronoUnit.DAYS))
+                dataCriacao(LocalDateTime.now()).
+                dataAtualizacao(LocalDateTime.now()).
+                dataLimite(LocalDateTime.now().plus(2, ChronoUnit.DAYS))
                 .build();
     }
 

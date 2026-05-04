@@ -1,6 +1,7 @@
 package com.github.diogenesssantos.facilittecnologia.util;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * @author Dioge
@@ -8,8 +9,8 @@ import java.time.Instant;
  */
 public class ValidaHoraUtil {
 
-    public static boolean isPassado(Instant data) {
-        return data.isBefore(Instant.now());
+    public static boolean isPassado(LocalDateTime data) {
+        return data.isBefore(LocalDateTime.now());
     }
 
 }

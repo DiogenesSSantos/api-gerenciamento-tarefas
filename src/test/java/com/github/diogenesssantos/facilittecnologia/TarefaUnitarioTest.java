@@ -1,12 +1,14 @@
 package com.github.diogenesssantos.facilittecnologia;
 
 import com.github.diogenesssantos.facilittecnologia.exceptionhandller.exception.BuilderTarefaException;
+import com.github.diogenesssantos.facilittecnologia.exceptionhandller.exception.CampoInvalidoException;
 import com.github.diogenesssantos.facilittecnologia.model.Status;
 import com.github.diogenesssantos.facilittecnologia.model.Tarefa;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,9 +25,9 @@ class TarefaUnitarioTest {
                 descricao("Estágio facilit").
                 responsavel("Diogenes da Silva Santos").
                 status(Status.FAZER).
-                dataCriacao(Instant.now()).
-                dataAtualizacao(Instant.now()).
-                dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
+                dataCriacao(LocalDateTime.now()).
+                dataAtualizacao(LocalDateTime.now()).
+                dataLimite(LocalDateTime.now().plus(2, ChronoUnit.DAYS))
                 .build();
 
     }
@@ -48,30 +50,30 @@ class TarefaUnitarioTest {
 
 
     @Test
-    void deveLancarIllegalArgumentException_QuandoCriarUmaTarefaComOcampoTituloNullOuVazio() {
+    void CampoInvalidoException_QuandoCriarUmaTarefaComOcampoTituloNullOuVazio() {
 
         assertAll(() -> {
-            assertThrows(IllegalArgumentException.class, () -> {
+            assertThrows(CampoInvalidoException.class, () -> {
                 new Tarefa.Builder().
                         titulo("     ").
                         descricao("Estágio Facilit").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
-                        dataCriacao(Instant.now()).
-                        dataAtualizacao(Instant.now()).
-                        dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
+                        dataCriacao(LocalDateTime.now()).
+                        dataAtualizacao(LocalDateTime.now()).
+                        dataLimite(LocalDateTime.now().plus(2, ChronoUnit.DAYS))
                         .build();
             }, () -> "Espereva um campo vázio, mas obteve outro valor.");
 
-            assertThrows(IllegalArgumentException.class, () -> {
+            assertThrows(CampoInvalidoException.class, () -> {
                 new Tarefa.Builder().
                         titulo(null).
                         descricao("Estágio Facilit").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
-                        dataCriacao(Instant.now()).
-                        dataAtualizacao(Instant.now()).
-                        dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
+                        dataCriacao(LocalDateTime.now()).
+                        dataAtualizacao(LocalDateTime.now()).
+                        dataLimite(LocalDateTime.now().plus(2, ChronoUnit.DAYS))
                         .build();
             }, () -> "Esperava um campo null, mas obteve outro resultado.");
         });
@@ -79,30 +81,30 @@ class TarefaUnitarioTest {
 
 
     @Test
-    void deveLancarIllegalArgumentException_QuandoUmaTarefaComOCampoDescricaoNuloOuVazio() {
+    void CampoInvalidoException_QuandoUmaTarefaComOCampoDescricaoNuloOuVazio() {
 
         assertAll(() -> {
-            assertThrows(IllegalArgumentException.class, () -> {
+            assertThrows(CampoInvalidoException.class, () -> {
                 new Tarefa.Builder().
                         titulo("Tarefa Facilit").
                         descricao("   ").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
-                        dataCriacao(Instant.now()).
-                        dataAtualizacao(Instant.now()).
-                        dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
+                        dataCriacao(LocalDateTime.now()).
+                        dataAtualizacao(LocalDateTime.now()).
+                        dataLimite(LocalDateTime.now().plus(2, ChronoUnit.DAYS))
                         .build();
             }, () -> "Espereva um campo vázio, mas obteve outro valor.");
 
-            assertThrows(IllegalArgumentException.class, () -> {
+            assertThrows(CampoInvalidoException.class, () -> {
                 new Tarefa.Builder().
                         titulo("Tarefa Facilit").
                         descricao(null).
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
-                        dataCriacao(Instant.now()).
-                        dataAtualizacao(Instant.now()).
-                        dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
+                        dataCriacao(LocalDateTime.now()).
+                        dataAtualizacao(LocalDateTime.now()).
+                        dataLimite(LocalDateTime.now().plus(2, ChronoUnit.DAYS))
                         .build();
             }, () -> "Esperava um campo null, mas obteve outro resultado.");
         });
@@ -110,30 +112,30 @@ class TarefaUnitarioTest {
 
 
     @Test
-    void deveLancarIllegalArgumentException_QuandoUmaTarefaComOCampoResponsavelNuloOuVazio() {
+    void CampoInvalidoException_QuandoUmaTarefaComOCampoResponsavelNuloOuVazio() {
 
         assertAll(() -> {
-            assertThrows(IllegalArgumentException.class, () -> {
+            assertThrows(CampoInvalidoException.class, () -> {
                 new Tarefa.Builder().
                         titulo("Tarefa Facilit").
                         descricao("Estágio Facilit").
                         responsavel("   ").
                         status(Status.FAZER).
-                        dataCriacao(Instant.now()).
-                        dataAtualizacao(Instant.now()).
-                        dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
+                        dataCriacao(LocalDateTime.now()).
+                        dataAtualizacao(LocalDateTime.now()).
+                        dataLimite(LocalDateTime.now().plus(2, ChronoUnit.DAYS))
                         .build();
             }, () -> "Esperava um campo vázio, mas obteve outro valor.");
 
-            assertThrows(IllegalArgumentException.class, () -> {
+            assertThrows(CampoInvalidoException.class, () -> {
                 new Tarefa.Builder().
                         titulo("Tarefa Facilit").
                         descricao("Estágio Facilit").
                         responsavel(null).
                         status(Status.FAZER).
-                        dataCriacao(Instant.now()).
-                        dataAtualizacao(Instant.now()).
-                        dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
+                        dataCriacao(LocalDateTime.now()).
+                        dataAtualizacao(LocalDateTime.now()).
+                        dataLimite(LocalDateTime.now().plus(2, ChronoUnit.DAYS))
                         .build();
             }, () -> "Esperava um campo null, mas obteve outro resultado.");
         });
@@ -141,78 +143,78 @@ class TarefaUnitarioTest {
 
 
     @Test
-    void deveLancarIllegalArgumentException_QuandoUmaTarefaComOCampoStatusNulo() {
-        assertThrows(IllegalArgumentException.class, () -> {
+    void CampoInvalidoException_QuandoUmaTarefaComOCampoStatusNulo() {
+        assertThrows(CampoInvalidoException.class, () -> {
             new Tarefa.Builder().
                     titulo("Tarefa Facilit").
                     descricao("Estágio facilit").
                     responsavel("Diogenes da Silva Santos").
                     status(null).
-                    dataCriacao(Instant.now()).
-                    dataAtualizacao(Instant.now()).
-                    dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
+                    dataCriacao(LocalDateTime.now()).
+                    dataAtualizacao(LocalDateTime.now()).
+                    dataLimite(LocalDateTime.now().plus(2, ChronoUnit.DAYS))
                     .build();
         }, () -> "Esperava um campo null, mas obteve outro valor.");
     }
 
 
     @Test
-    void deveLancarIllegalArgumentException_QuandoUmaTarefaComOCampoDataCriacaoNulo() {
-        assertThrows(IllegalArgumentException.class, () -> {
+    void CampoInvalidoException_QuandoUmaTarefaComOCampoDataCriacaoNulo() {
+        assertThrows(CampoInvalidoException.class, () -> {
             new Tarefa.Builder().
                     titulo("Tarefa Facilit").
                     descricao("Estágio facilit").
                     responsavel("Diogenes da Silva Santos").
                     status(Status.FAZER).
                     dataCriacao(null).
-                    dataAtualizacao(Instant.now()).
-                    dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
+                    dataAtualizacao(LocalDateTime.now()).
+                    dataLimite(LocalDateTime.now().plus(2, ChronoUnit.DAYS))
                     .build();
         }, () -> "Esperava um campo null, mas obteve outro valor.");
     }
 
 
     @Test
-    void deveLancarIllegalArgumentException_QuandoUmaTarefaComOCampoDataAtualizacaoNulo() {
-        assertThrows(IllegalArgumentException.class, () -> {
+    void CampoInvalidoException_QuandoUmaTarefaComOCampoDataAtualizacaoNulo() {
+        assertThrows(CampoInvalidoException.class, () -> {
             new Tarefa.Builder().
                     titulo("Tarefa Facilit").
                     descricao("Estágio Facilit").
                     responsavel("Diogenes da Silva Santos").
                     status(Status.FAZER).
-                    dataCriacao(Instant.now()).
+                    dataCriacao(LocalDateTime.now()).
                     dataAtualizacao(null).
-                    dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
+                    dataLimite(LocalDateTime.now().plus(2, ChronoUnit.DAYS))
                     .build();
         }, () -> "Esperava um campo null, mas obteve outro valor.");
     }
 
 
     @Test
-    void deveLancarIllegalArgumentException_QuandoUmaTarefaComOCampoDataLimiteNoPassadoOuNulo() {
+    void CampoInvalidoException_QuandoUmaTarefaComOCampoDataLimiteNoPassadoOuNulo() {
 
         assertAll(() -> {
-            assertThrows(IllegalArgumentException.class, () -> {
+            assertThrows(CampoInvalidoException.class, () -> {
                 new Tarefa.Builder().
                         titulo("Tarefa Facilit").
                         descricao("Estágio facilit").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
-                        dataCriacao(Instant.now()).
-                        dataAtualizacao(Instant.now()).
+                        dataCriacao(LocalDateTime.now()).
+                        dataAtualizacao(LocalDateTime.now()).
                         dataLimite(null)
                         .build();
             }, () -> "Esperava um campo null, mas obteve outro valor.");
         }, () -> {
-            assertThrows(IllegalArgumentException.class, () -> {
+            assertThrows(CampoInvalidoException.class, () -> {
                 new Tarefa.Builder().
                         titulo("Tarefa Facilit").
                         descricao("Estágio Facilit").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
-                        dataCriacao(Instant.now()).
-                        dataAtualizacao(Instant.now()).
-                        dataLimite(Instant.now().minus(2, ChronoUnit.MINUTES))
+                        dataCriacao(LocalDateTime.now()).
+                        dataAtualizacao(LocalDateTime.now()).
+                        dataLimite(LocalDateTime.now().minus(2, ChronoUnit.MINUTES))
                         .build();
             }, () -> "Esperava um campo dataLimite no passado, mas obteve com valor.");
         });

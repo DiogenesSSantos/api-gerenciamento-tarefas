@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -43,27 +43,27 @@ public class TarefaServiceTest {
                         descricao("Fazer um bolo").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
-                        dataCriacao(Instant.now()).
-                        dataAtualizacao(Instant.now()).
-                        dataLimite(Instant.now().plus(8, ChronoUnit.DAYS))
+                        dataCriacao(LocalDateTime.now()).
+                        dataAtualizacao(LocalDateTime.now()).
+                        dataLimite(LocalDateTime.now().plus(8, ChronoUnit.DAYS))
                         .build(),
                 new Tarefa.Builder().
                         titulo("Facilit").
                         descricao("Front-end atualização componente").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.FAZER).
-                        dataCriacao(Instant.now()).
-                        dataAtualizacao(Instant.now()).
-                        dataLimite(Instant.now().plus(10, ChronoUnit.DAYS))
+                        dataCriacao(LocalDateTime.now()).
+                        dataAtualizacao(LocalDateTime.now()).
+                        dataLimite(LocalDateTime.now().plus(10, ChronoUnit.DAYS))
                         .build(),
                 new Tarefa.Builder().
                         titulo("Facilit estágio").
                         descricao("Aprender react-native").
                         responsavel("Diogenes da Silva Santos").
                         status(Status.PROGRESSO).
-                        dataCriacao(Instant.now()).
-                        dataAtualizacao(Instant.now()).
-                        dataLimite(Instant.now().plus(22, ChronoUnit.DAYS))
+                        dataCriacao(LocalDateTime.now()).
+                        dataAtualizacao(LocalDateTime.now()).
+                        dataLimite(LocalDateTime.now().plus(22, ChronoUnit.DAYS))
                         .build()
         );
 
@@ -111,9 +111,9 @@ public class TarefaServiceTest {
                 descricao("Estágio facilit").
                 responsavel("Diogenes da Silva Santos").
                 status(Status.FAZER).
-                dataCriacao(Instant.now()).
-                dataAtualizacao(Instant.now()).
-                dataLimite(Instant.now().plus(8, ChronoUnit.DAYS))
+                dataCriacao(LocalDateTime.now()).
+                dataAtualizacao(LocalDateTime.now()).
+                dataLimite(LocalDateTime.now().plus(8, ChronoUnit.DAYS))
                 .build();
 
         given(mockRepository.save(any(Tarefa.class)))
@@ -288,7 +288,7 @@ public class TarefaServiceTest {
                 .responsavel(tarefaExistente.getResponsavel())
                 .status(tarefaExistente.getStatus())
                 .dataCriacao(tarefaExistente.getDataCriacao())
-                .dataAtualizacao(Instant.now())
+                .dataAtualizacao(LocalDateTime.now())
                 .dataLimite(tarefaExistente.getDataLimite())
                 .build();
 
@@ -326,7 +326,7 @@ public class TarefaServiceTest {
                 .responsavel(tarefaExistente.getResponsavel())
                 .status(tarefaExistente.getStatus())
                 .dataCriacao(tarefaExistente.getDataCriacao())
-                .dataAtualizacao(Instant.now())
+                .dataAtualizacao(LocalDateTime.now())
                 .dataLimite(tarefaExistente.getDataLimite())
                 .build();
 
@@ -388,7 +388,7 @@ public class TarefaServiceTest {
                 .responsavel(tarefaExistente.getResponsavel())
                 .status(tarefaExistente.getStatus())
                 .dataCriacao(tarefaExistente.getDataCriacao())
-                .dataAtualizacao(Instant.now())
+                .dataAtualizacao(LocalDateTime.now())
                 .dataLimite(tarefaExistente.getDataLimite())
                 .build();
 
@@ -426,7 +426,7 @@ public class TarefaServiceTest {
                 .responsavel(tarefaExistente.getResponsavel())
                 .status(tarefaExistente.getStatus())
                 .dataCriacao(tarefaExistente.getDataCriacao())
-                .dataAtualizacao(Instant.now())
+                .dataAtualizacao(LocalDateTime.now())
                 .dataLimite(tarefaExistente.getDataLimite())
                 .build();
 

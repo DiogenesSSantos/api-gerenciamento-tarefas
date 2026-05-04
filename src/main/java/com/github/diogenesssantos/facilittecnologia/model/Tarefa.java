@@ -1,13 +1,14 @@
 package com.github.diogenesssantos.facilittecnologia.model;
 
 import com.github.diogenesssantos.facilittecnologia.exceptionhandller.exception.BuilderTarefaException;
+import com.github.diogenesssantos.facilittecnologia.exceptionhandller.exception.CampoInvalidoException;
 import com.github.diogenesssantos.facilittecnologia.util.ValidaHoraUtil;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.Instant;
+import java.time.LocalDateTime ;
 
 @Data
 @Entity
@@ -26,13 +27,14 @@ public class Tarefa {
     @Column(name = "t_status")
     private Status status;
 
-    @CreationTimestamp
-    private Instant dataCriacao;
+    @Column(columnDefinition = "TIMESTAMP(0)")
+    private LocalDateTime  dataCriacao;
 
-    @UpdateTimestamp
-    private Instant dataAtualizacao;
+    @Column(columnDefinition = "TIMESTAMP(0)")
+    private LocalDateTime  dataAtualizacao;
 
-    private Instant dataLimite;
+    @Column(columnDefinition = "TIMESTAMP(0)")
+    private LocalDateTime  dataLimite;
 
 
     private Tarefa() {
@@ -54,9 +56,9 @@ public class Tarefa {
      *                 .descricao("Criando tarefa teste")
      *                 .responsavel("Diogenes da Silva Santos")
      *                 .status(Status.FAZER)
-     *                 .dataCriacao(Instant.now())
-     *                 .dataAtualizacao(Instant.now())
-     *                 .dataLimite(Instant.now().plus(2, ChronoUnit.DAYS))
+     *                 .dataCriacao(LocalDateTime .now())
+     *                 .dataAtualizacao(LocalDateTime .now())
+     *                 .dataLimite(LocalDateTime .now().plus(2, ChronoUnit.DAYS))
      *                 .build();
      * </pre>
      *
@@ -69,8 +71,8 @@ public class Tarefa {
      * @param dataLimite      instante limite para conclusão da tarefa
      * @see Tarefa.Builder
      */
-    private Tarefa(String titulo, String descricao, String responsavel, Status status, Instant dataCriacao,
-                   Instant dataAtualizacao, Instant dataLimite) {
+    private Tarefa(String titulo, String descricao, String responsavel, Status status, LocalDateTime  dataCriacao,
+                   LocalDateTime  dataAtualizacao, LocalDateTime  dataLimite) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.responsavel = responsavel;
@@ -86,7 +88,7 @@ public class Tarefa {
  */
 //    public  OffsetDateTime getDataCriacao(){
 //       return dataCriacao.atOffset(ZoneOffset.UTC)
-//               .atZoneSameInstant(ZoneId.of("America/Sao_Paulo"))
+//               .atZoneSameLocalDateTime (ZoneId.of("America/Sao_Paulo"))
 //               .toOffsetDateTime();
 //    }
 //
@@ -97,16 +99,16 @@ public class Tarefa {
         private String descricao;
         private String responsavel;
         private Status status;
-        private Instant dataCriacao;
-        private Instant dataAtualizacao;
-        private Instant dataLimite;
+        private LocalDateTime  dataCriacao;
+        private LocalDateTime  dataAtualizacao;
+        private LocalDateTime  dataLimite;
 
         public Builder() {
         }
 
         public Builder titulo(String titulo) {
             if (titulo == null || titulo.isBlank()) {
-                throw new IllegalArgumentException("O campo titulo não poder ser vázio");
+                throw new CampoInvalidoException("O campo titulo não poder ser vázio");
             }
 
             this.titulo = titulo;
@@ -116,7 +118,7 @@ public class Tarefa {
 
         public Builder descricao(String descricao) {
             if (descricao == null || descricao.isBlank()) {
-                throw new IllegalArgumentException("O campo descrição não poder ser vázio");
+                throw new CampoInvalidoException("O campo descrição não poder ser vázio");
             }
 
             this.descricao = descricao;
@@ -125,7 +127,7 @@ public class Tarefa {
 
         public Builder responsavel(String responsavel) {
             if (responsavel == null || responsavel.isBlank()) {
-                throw new IllegalArgumentException("O campo responsável não poder ser vázio");
+                throw new CampoInvalidoException("O campo responsável não poder ser vázio");
             }
 
             this.responsavel = responsavel;
@@ -135,7 +137,7 @@ public class Tarefa {
 
         public Builder status(Status status) {
             if (status == null) {
-                throw new IllegalArgumentException(
+                throw new CampoInvalidoException(
                         "O campo status deve conter um Status (FAZER, PROGRESSO, ATRASADO, CONCLUIDO)");
             }
 
@@ -143,18 +145,18 @@ public class Tarefa {
             return this;
         }
 
-        public Builder dataCriacao(Instant dataCriacao) {
+        public Builder dataCriacao(LocalDateTime  dataCriacao) {
             if (dataCriacao == null) {
-                throw new IllegalArgumentException("A data de criação tem que ser um periodo no tempo atual.");
+                throw new CampoInvalidoException("A data de criação tem que ser um periodo no tempo atual.");
             }
 
             this.dataCriacao = dataCriacao;
             return this;
         }
 
-        public Builder dataAtualizacao(Instant dataAtualizacao) {
+        public Builder dataAtualizacao(LocalDateTime  dataAtualizacao) {
             if (dataAtualizacao == null) {
-                throw new IllegalArgumentException("A data de criação tem que ser em um periodo no tempo atual.");
+                throw new CampoInvalidoException("A data de criação tem que ser em um periodo no tempo atual.");
             }
 
             this.dataAtualizacao = dataAtualizacao;
@@ -162,11 +164,11 @@ public class Tarefa {
         }
 
 
-        public Builder dataLimite(Instant dataLimite) {
+        public Builder dataLimite(LocalDateTime  dataLimite) {
             if (dataLimite == null) {
-                throw new IllegalArgumentException("O campo dataLimite deve ser em um periodo no tempo futuro.");
+                throw new CampoInvalidoException("O campo dataLimite deve ser em um periodo no tempo futuro.");
             } else if (ValidaHoraUtil.isPassado(dataLimite))
-                throw new IllegalArgumentException("O campo dataLimite deve ser em um periodo no tempo futuro.");
+                throw new CampoInvalidoException("O campo dataLimite deve ser em um periodo no tempo futuro.");
 
             this.dataLimite = dataLimite;
             return this;

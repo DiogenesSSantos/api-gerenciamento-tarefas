@@ -1,18 +1,21 @@
 package com.github.diogenesssantos.facilittecnologia.controller;
 
 import com.github.diogenesssantos.facilittecnologia.assembler.AssemblerTarefa;
+import com.github.diogenesssantos.facilittecnologia.controller.request.TarefaRequestDTO;
 import com.github.diogenesssantos.facilittecnologia.controller.response.TarefaResponseDTO;
+import com.github.diogenesssantos.facilittecnologia.docs.TarefaDocumentacaoOpenAPI;
+import com.github.diogenesssantos.facilittecnologia.model.Tarefa;
 import com.github.diogenesssantos.facilittecnologia.service.TarefaService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/tarefas")
-public class TarefaController {
+public class TarefaController implements TarefaDocumentacaoOpenAPI {
 
     private TarefaService tarefaService;
 
@@ -25,7 +28,17 @@ public class TarefaController {
     public ResponseEntity<List<TarefaResponseDTO>> buscarTodas() {
         var listTarefaBD = tarefaService.buscarTodas();
         var listTarefaResponseDTO = AssemblerTarefa.listModelToListDTO(listTarefaBD);
-        return ResponseEntity.ok(listTarefaResponseDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(listTarefaResponseDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<TarefaResponseDTO> salvar(@RequestBody TarefaRequestDTO tarefaRequestDTO) {
+        Tarefa tarefa = AssemblerTarefa.dtoToModel(tarefaRequestDTO);
+        Tarefa TarefaBD = tarefaService.salvar(tarefa);
+        TarefaResponseDTO tarefaResponseDTO = AssemblerTarefa.modelToDTO(TarefaBD);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(tarefaResponseDTO);
     }
 
 }
