@@ -2,10 +2,12 @@ package com.github.diogenesssantos.facilittecnologia.repository;
 
 import com.github.diogenesssantos.facilittecnologia.model.Status;
 import com.github.diogenesssantos.facilittecnologia.model.Tarefa;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface TarefaRepositoryCustom {
 
     Optional<Tarefa> buscarPorTitulo(String titulo);
