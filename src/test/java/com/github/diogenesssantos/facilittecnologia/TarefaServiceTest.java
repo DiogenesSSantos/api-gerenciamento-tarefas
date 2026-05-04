@@ -1,6 +1,6 @@
 package com.github.diogenesssantos.facilittecnologia;
 
-import com.github.diogenesssantos.facilittecnologia.exceptionhandller.exception.TarefaNotFoundException;
+import com.github.diogenesssantos.facilittecnologia.exception.TarefaNaoLocalizadaException;
 import com.github.diogenesssantos.facilittecnologia.model.Status;
 import com.github.diogenesssantos.facilittecnologia.model.Tarefa;
 import com.github.diogenesssantos.facilittecnologia.repository.TarefaRepository;
@@ -169,9 +169,9 @@ public class TarefaServiceTest {
                     return Optional.empty();
                 });
 
-        assertThrows(TarefaNotFoundException.class,
+        assertThrows(TarefaNaoLocalizadaException.class,
                 () -> mockService.buscarPorId(idValidoExpectativa),
-                () -> "Esperava-se um TarefaNotFoundException, mas gerou outro resultado.");
+                () -> "Esperava-se um TarefaNaoLocalizadaException, mas gerou outro resultado.");
 
         then(mockRepository).should().findById(any(Long.class));
     }
@@ -185,7 +185,7 @@ public class TarefaServiceTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> mockService.buscarPorId(idValidoExpectativa),
-                () -> "Esperava-se um TarefaNotFoundException, mas gerou outro resultado.");
+                () -> "Esperava-se um TarefaNaoLocalizadaException, mas gerou outro resultado.");
 
     }
 
@@ -244,22 +244,22 @@ public class TarefaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve lançar uma exception TarefaNotFoundException, quando chamar o método buscarPorTitulo" +
+    @DisplayName("Deve lançar uma exception TarefaNaoLocalizadaException, quando chamar o método buscarPorTitulo" +
             "passando como parâmetro um titulo que não correlacione a uma Tarefa no banco de dados.")
     void deve_Lancar_TarefaNotFoundException_Quando_BuscarComTitulo_E_O_Titulo_Nao_Existir_Uma_Tarefa_Correlacionada() {
         var tituloNaoExistente = "Testando titulo invalido";
         var msgExceptionExpectativa = String.format("Tarefa com  o titulo [%s] não existe.", tituloNaoExistente);
 
         given(mockRepository.buscarPorTitulo(any(String.class)))
-                .willThrow(new TarefaNotFoundException(msgExceptionExpectativa));
+                .willThrow(new TarefaNaoLocalizadaException(msgExceptionExpectativa));
 
-        TarefaNotFoundException tarefaNotFoundException = assertThrows(TarefaNotFoundException.class,
+        TarefaNaoLocalizadaException tarefaNaoLocalizadaException = assertThrows(TarefaNaoLocalizadaException.class,
                 () -> mockService.buscarPorTitulo(tituloNaoExistente));
 
 
         then(mockRepository).should().buscarPorTitulo(any(String.class));
-        assertNotNull(tarefaNotFoundException);
-        assertEquals(msgExceptionExpectativa, tarefaNotFoundException.getMessage());
+        assertNotNull(tarefaNaoLocalizadaException);
+        assertEquals(msgExceptionExpectativa, tarefaNaoLocalizadaException.getMessage());
     }
 
 
@@ -334,7 +334,7 @@ public class TarefaServiceTest {
                 .willReturn(Optional.empty());
 
 
-        assertThrows(TarefaNotFoundException.class, () -> {
+        assertThrows(TarefaNaoLocalizadaException.class, () -> {
             mockService.atualizarPorTitulo(tituloExpectativa, tarefaAtualizada);
         });
 
@@ -430,7 +430,7 @@ public class TarefaServiceTest {
                 .dataLimite(tarefaExistente.getDataLimite())
                 .build();
 
-        assertThrows(TarefaNotFoundException.class, () -> {
+        assertThrows(TarefaNaoLocalizadaException.class, () -> {
             mockService.atualizarPorDescricao(descricaoExpectativa, tarefaAtualizada);
         });
 
@@ -542,7 +542,7 @@ public class TarefaServiceTest {
 
 
     @Test
-    @DisplayName("Deve lançar TarefaNotFoundException, " +
+    @DisplayName("Deve lançar TarefaNaoLocalizadaException, " +
             "quando chamar o método atualizarStatus e o parâmetro titulo não correlacionar a uma Tarefa.")
     void deve_Lancar_TarefaNotFoundException_Quando_AtualizarStatus_PorTitulo_O_Titulo_Nao_Correlacionar_A_Uma_Tarefa() {
         String tituloNaoExisteExpectativa = "Facilit não existe BD";
@@ -551,7 +551,7 @@ public class TarefaServiceTest {
         given(mockRepository.buscarPorTitulo(any(String.class)))
                 .willReturn(Optional.empty());
 
-        assertThrows(TarefaNotFoundException.class, () ->
+        assertThrows(TarefaNaoLocalizadaException.class, () ->
                 mockService.atualizarStatusPorTitulo(tituloNaoExisteExpectativa, statusExpectativa));
 
         then(mockRepository).should().buscarPorTitulo(any(String.class));

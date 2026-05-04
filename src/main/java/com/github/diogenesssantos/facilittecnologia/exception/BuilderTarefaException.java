@@ -1,4 +1,4 @@
-package com.github.diogenesssantos.facilittecnologia.exceptionhandller.exception;
+package com.github.diogenesssantos.facilittecnologia.exception;
 
 public class BuilderTarefaException extends RuntimeException {
 

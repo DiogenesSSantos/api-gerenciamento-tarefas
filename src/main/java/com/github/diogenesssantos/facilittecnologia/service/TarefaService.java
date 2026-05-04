@@ -1,6 +1,6 @@
 package com.github.diogenesssantos.facilittecnologia.service;
 
-import com.github.diogenesssantos.facilittecnologia.exceptionhandller.exception.TarefaNotFoundException;
+import com.github.diogenesssantos.facilittecnologia.exception.TarefaNaoLocalizadaException;
 import com.github.diogenesssantos.facilittecnologia.model.Status;
 import com.github.diogenesssantos.facilittecnologia.model.Tarefa;
 import com.github.diogenesssantos.facilittecnologia.repository.TarefaRepository;
@@ -32,7 +32,7 @@ public class TarefaService {
         if (id == null) throw new IllegalArgumentException("O campo id não pode ser nulo");
 
         return repository.findById(id).orElseThrow(
-                () -> new TarefaNotFoundException(
+                () -> new TarefaNaoLocalizadaException(
                         String.format("A tarefa com o id [%s] não existe no banco de dados.", id)));
     }
 
@@ -41,7 +41,7 @@ public class TarefaService {
 
         return repository.buscarPorTitulo(titulo)
                 .orElseThrow(() ->
-                        new TarefaNotFoundException(
+                        new TarefaNaoLocalizadaException(
                                 String.format("A tarefa com o titulo [%s] não existe no banco de dados.", titulo)));
 
     }
@@ -51,7 +51,7 @@ public class TarefaService {
 
         return repository.buscarPorDescricao(descricao)
                 .orElseThrow(() ->
-                        new TarefaNotFoundException(String.format("A tarefa com o descrição [%s] " +
+                        new TarefaNaoLocalizadaException(String.format("A tarefa com o descrição [%s] " +
                                 "não existe no banco de dados.", descricao)));
 
     }

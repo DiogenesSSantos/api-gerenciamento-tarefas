@@ -1,13 +1,12 @@
 package com.github.diogenesssantos.facilittecnologia;
 
-import com.github.diogenesssantos.facilittecnologia.exceptionhandller.exception.BuilderTarefaException;
-import com.github.diogenesssantos.facilittecnologia.exceptionhandller.exception.CampoInvalidoException;
+import com.github.diogenesssantos.facilittecnologia.exception.BuilderTarefaException;
+import com.github.diogenesssantos.facilittecnologia.exception.CampoInvalidoException;
 import com.github.diogenesssantos.facilittecnologia.model.Status;
 import com.github.diogenesssantos.facilittecnologia.model.Tarefa;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 

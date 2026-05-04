@@ -1,12 +1,10 @@
 package com.github.diogenesssantos.facilittecnologia.model;
 
-import com.github.diogenesssantos.facilittecnologia.exceptionhandller.exception.BuilderTarefaException;
-import com.github.diogenesssantos.facilittecnologia.exceptionhandller.exception.CampoInvalidoException;
+import com.github.diogenesssantos.facilittecnologia.exception.BuilderTarefaException;
+import com.github.diogenesssantos.facilittecnologia.exception.CampoInvalidoException;
 import com.github.diogenesssantos.facilittecnologia.util.ValidaHoraUtil;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime ;
 
