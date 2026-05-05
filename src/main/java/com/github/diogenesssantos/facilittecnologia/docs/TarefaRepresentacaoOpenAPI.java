@@ -2,7 +2,8 @@ package com.github.diogenesssantos.facilittecnologia.docs;
 
 public interface TarefaRepresentacaoOpenAPI {
 
-    String BAD_REQUEST_400 = """         
+    String BAD_REQUEST_400_TITULO = """         
+           
             {
               "statusCode": 400,
               "mensagem": "O campo titulo não poder ser vázio",
@@ -10,6 +11,10 @@ public interface TarefaRepresentacaoOpenAPI {
               "classeException": "CampoInvalidoException",
               "timeStamp": "2026-05-04T21:20:57.8320543"
             }
+           
+            """;
+
+    String BAD_REQUEST_400_DESCRICAO = """
             
             {
               "statusCode": 400,
@@ -19,13 +24,21 @@ public interface TarefaRepresentacaoOpenAPI {
               "timeStamp": "2026-05-04T21:21:27.5134085"
             }
             
-            {
+            """;
+
+    String BAD_REQUEST_400_RESPONSAVEL = """
+            
+             {
               "statusCode": 400,
               "mensagem": "O campo responsável não poder ser vázio",
               "mensagemUsuario": "O campo responsavel é obrigatório e está inválido.",
               "classeException": "CampoInvalidoException",
               "timeStamp": "2026-05-04T21:21:50.4528263"
             }
+            
+            """;
+
+    String BAD_REQUEST_400_STATUS = """
             
             {
               "statusCode": 400,
@@ -35,6 +48,10 @@ public interface TarefaRepresentacaoOpenAPI {
               "timeStamp": "2026-05-04T21:22:16.4049368"
             }
             
+            """;
+
+    String BAD_REQUEST_400_DATA_LIMITE = """
+            
             {
               "statusCode": 400,
               "mensagem": "O campo dataLimite deve ser em um periodo no tempo futuro.",
@@ -42,20 +59,17 @@ public interface TarefaRepresentacaoOpenAPI {
               "classeException": "CampoInvalidoException",
               "timeStamp": "2026-05-04T21:17:08.9443613"
             }
-            
-            
-            
-            
+
             """;
 
     String NOT_FOUND_404 = """
             
             {
-                "statusCode": 404,
-                "mensagem": "Tarefa de id [?] não localizado no banco de dados.",
-                "mensagemUsuario": "O id passado não correlaciona a uma tarefa no banco de dados.",
-                "classeException": "TarefaNotFoundException",
-                "timeStamp": "2026-05-07T11:27:45.2638271"
+              "statusCode": 404,
+              "mensagem": "A tarefa com o id [?] não existe no banco de dados.",
+              "mensagemUsuario": "O campo id passado não correlaciona a uma tarefa no banco de dados.",
+              "classeException": "TarefaNaoLocalizadaException",
+              "timeStamp": "2026-05-05T06:02:05.8719807"
             }
             
             """;

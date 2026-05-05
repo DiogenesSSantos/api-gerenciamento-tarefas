@@ -103,13 +103,15 @@ public class TarefaService {
         if (tarefaRequestDTO.status() != null) tarefaBD.setStatus(tarefaRequestDTO.status());
         if (tarefaRequestDTO.dataLimite() != null) {
             ValidaHoraUtil.futuroOuThrows(tarefaRequestDTO.dataLimite());
-            tarefaBD.setDataAtualizacao(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
             tarefaBD.setDataLimite(tarefaRequestDTO.dataLimite());
         }
+        tarefaBD.setDataAtualizacao(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
         return salvar(tarefaBD);
     }
 
+
+    @Deprecated
     private void atualizar(Tarefa tarefaAtual, Tarefa tarefaAtualizada) {
         tarefaAtual.setTitulo(tarefaAtualizada.getTitulo());
         tarefaAtual.setDescricao(tarefaAtualizada.getDescricao());

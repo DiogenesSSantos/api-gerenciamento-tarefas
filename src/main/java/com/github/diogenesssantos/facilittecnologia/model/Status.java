@@ -1,5 +1,7 @@
 package com.github.diogenesssantos.facilittecnologia.model;
 
+import com.github.diogenesssantos.facilittecnologia.exception.CampoInvalidoException;
+
 public enum Status {
     FAZER("A fazer"),
     PROGRESSO("Em progresso"),
@@ -15,4 +17,11 @@ public enum Status {
     }
 
     private String nome;
+
+    public static void validoOuThrows(Status status) {
+        if (status == null) throw new CampoInvalidoException(
+                "O campo status deve conter um Status (FAZER, PROGRESSO, ATRASADO, CONCLUIDO)", "status");
+    }
+
+
 }
