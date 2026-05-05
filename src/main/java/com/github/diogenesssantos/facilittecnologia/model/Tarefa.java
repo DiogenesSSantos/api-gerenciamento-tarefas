@@ -106,7 +106,7 @@ public class Tarefa {
 
         public Builder titulo(String titulo) {
             if (titulo == null || titulo.isBlank()) {
-                throw new CampoInvalidoException("O campo titulo não poder ser vázio");
+                throw new CampoInvalidoException("O campo titulo não poder ser vázio", "titulo");
             }
 
             this.titulo = titulo;
@@ -116,7 +116,7 @@ public class Tarefa {
 
         public Builder descricao(String descricao) {
             if (descricao == null || descricao.isBlank()) {
-                throw new CampoInvalidoException("O campo descrição não poder ser vázio");
+                throw new CampoInvalidoException("O campo descrição não poder ser vázio", "descricao");
             }
 
             this.descricao = descricao;
@@ -125,7 +125,7 @@ public class Tarefa {
 
         public Builder responsavel(String responsavel) {
             if (responsavel == null || responsavel.isBlank()) {
-                throw new CampoInvalidoException("O campo responsável não poder ser vázio");
+                throw new CampoInvalidoException("O campo responsável não poder ser vázio", "responsavel");
             }
 
             this.responsavel = responsavel;
@@ -136,7 +136,7 @@ public class Tarefa {
         public Builder status(Status status) {
             if (status == null) {
                 throw new CampoInvalidoException(
-                        "O campo status deve conter um Status (FAZER, PROGRESSO, ATRASADO, CONCLUIDO)");
+                        "O campo status deve conter um Status (FAZER, PROGRESSO, ATRASADO, CONCLUIDO)", "status");
             }
 
             this.status = status;
@@ -145,7 +145,7 @@ public class Tarefa {
 
         public Builder dataCriacao(LocalDateTime  dataCriacao) {
             if (dataCriacao == null) {
-                throw new CampoInvalidoException("A data de criação tem que ser um periodo no tempo atual.");
+                throw new CampoInvalidoException("A data de criação tem que ser um periodo no tempo atual.", "dataCriacao");
             }
 
             this.dataCriacao = dataCriacao;
@@ -154,7 +154,7 @@ public class Tarefa {
 
         public Builder dataAtualizacao(LocalDateTime  dataAtualizacao) {
             if (dataAtualizacao == null) {
-                throw new CampoInvalidoException("A data de criação tem que ser em um periodo no tempo atual.");
+                throw new CampoInvalidoException("A data de criação tem que ser em um periodo no tempo atual.", "dataAtualizacao");
             }
 
             this.dataAtualizacao = dataAtualizacao;
@@ -164,9 +164,9 @@ public class Tarefa {
 
         public Builder dataLimite(LocalDateTime  dataLimite) {
             if (dataLimite == null) {
-                throw new CampoInvalidoException("O campo dataLimite deve ser em um periodo no tempo futuro.");
+                throw new CampoInvalidoException("O campo dataLimite deve ser em um periodo no tempo futuro.", "dataLimite");
             } else if (ValidaHoraUtil.isPassado(dataLimite))
-                throw new CampoInvalidoException("O campo dataLimite deve ser em um periodo no tempo futuro.");
+                throw new CampoInvalidoException("O campo dataLimite deve ser em um periodo no tempo futuro.", "dataLimite");
 
             this.dataLimite = dataLimite;
             return this;

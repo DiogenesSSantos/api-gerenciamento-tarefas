@@ -251,7 +251,7 @@ public class TarefaServiceTest {
         var msgExceptionExpectativa = String.format("Tarefa com  o titulo [%s] não existe.", tituloNaoExistente);
 
         given(mockRepository.buscarPorTitulo(any(String.class)))
-                .willThrow(new TarefaNaoLocalizadaException(msgExceptionExpectativa));
+                .willThrow(new TarefaNaoLocalizadaException(msgExceptionExpectativa, "titulo"));
 
         TarefaNaoLocalizadaException tarefaNaoLocalizadaException = assertThrows(TarefaNaoLocalizadaException.class,
                 () -> mockService.buscarPorTitulo(tituloNaoExistente));

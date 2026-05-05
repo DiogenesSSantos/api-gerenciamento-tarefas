@@ -14,8 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@Tag(name = "Documentação openAPI", description = "gerenciador de tarefas, " +
-        "permitindo criar, visualizar e atualizar tarefas.")
+@Tag(name = "Tarefas", description = "permitindo criar, visualizar e atualizar tarefas.")
 public interface TarefaDocumentacaoOpenAPI {
 
     @Operation(summary = "Buscar todas tarefas no banco de dados.",
@@ -30,20 +29,26 @@ public interface TarefaDocumentacaoOpenAPI {
                             )
                     ),
                     @ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
-            }
-    )
+            })
     ResponseEntity<List<TarefaResponseDTO>> buscarTodas();
 
 
     @Operation(summary = "Salvar um tarefa no banco de dados.",
             description = "Retorna uma JSON de tarefa após criada com todos os campos válidos.",
             responses = {
-                    @ApiResponse(description = "Sucesso", responseCode = "201",
+                    @ApiResponse(description = "Create", responseCode = "201",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = TarefaResponseDTO.class)))
-
+                    ,
+                    @ApiResponse(description = "Bad_request", responseCode = "400",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(example = TarefaRepresentacaoOpenAPI.BAD_REQUEST_400)))
                     , @ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
             })
     ResponseEntity<TarefaResponseDTO> salvar(TarefaRequestDTO tarefaRequestDTO);
+
+
+
+    ResponseEntity<TarefaResponseDTO> atualizarPorId(Long id , TarefaRequestDTO tarefaRequestDTO);
 
 }

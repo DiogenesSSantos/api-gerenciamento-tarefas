@@ -41,6 +41,16 @@ public class TarefaController implements TarefaDocumentacaoOpenAPI {
         return ResponseEntity.status(HttpStatus.CREATED).body(tarefaResponseDTO);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<TarefaResponseDTO> atualizarPorId(@PathVariable(name = "id") Long id ,
+                                                            @RequestBody TarefaRequestDTO tarefaRequestDTO) {
+        Tarefa tarefaBD = tarefaService.buscarPorId(id);
+        tarefaBD = tarefaService.atualizar(tarefaBD, tarefaRequestDTO);
+        TarefaResponseDTO tarefaResponseDTO = AssemblerTarefa.modelToDTO(tarefaBD);
+
+        return ResponseEntity.status(HttpStatus.OK).body(tarefaResponseDTO);
+    }
+
 }
 
 

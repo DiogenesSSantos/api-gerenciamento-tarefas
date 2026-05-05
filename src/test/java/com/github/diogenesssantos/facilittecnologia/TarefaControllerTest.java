@@ -107,7 +107,7 @@ public class TarefaControllerTest {
 
 
     @Test
-    @DisplayName("Deve retornar um JSON contendo uma TarefaResponseDTO," +
+    @DisplayName("Deve retornar um JSON contendo uma Tarefa," +
             " quando solicitar uma requisição POST no /tarefas.")
     void deve_Retornar_Uma_TarefaResponseDTO_Com_ID_Quando_fazer_uma_Requisicao_POST_tarefas() throws Exception {
         var tarefaExpectativa = mockTarefa;

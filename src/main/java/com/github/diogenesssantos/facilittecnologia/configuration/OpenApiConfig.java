@@ -15,9 +15,10 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI config() {
         return new OpenAPI().info(
-                        new Info().title("api-gereciamento-tarefas")
-                                .description("api-rest para gerenciamento de tarefas, " +
-                                        "permitindo criar, visualizar e atualizar tarefas. ")
+                        new Info().title("api-gerenciamento-tarefas")
+                                .description("api-rest criada para o desafio técnico - " +
+                                        "Estágio em Desenvolvimento de Software " +
+                                        "Facilit Tecnologia.")
                                 .version("1.0.0")
                                 .contact(new Contact().url("https://diogenesssantos.github.io/meu-portfolio/")
                                         .name("Diogenes S Santos").email("diogenescontatoofficial@hotmail.com"))
@@ -27,10 +28,7 @@ public class OpenApiConfig {
                                         .url("https://opensource.org/licenses/MIT")))
                 .externalDocs(new ExternalDocumentation()
                         .description("GitHub")
-                        .url("https://github.com/DiogenesSSantos"))
-                .externalDocs(new ExternalDocumentation()
-                        .description("Documentação JavaDoc")
-                        .url("http://devdiogenes.shop/apidocs/index.html"));
+                        .url("https://github.com/DiogenesSSantos/api-gerenciamento-tarefas"));
     }
 
 

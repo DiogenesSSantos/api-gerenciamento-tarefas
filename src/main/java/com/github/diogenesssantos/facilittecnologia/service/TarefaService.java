@@ -1,12 +1,16 @@
 package com.github.diogenesssantos.facilittecnologia.service;
 
+import com.github.diogenesssantos.facilittecnologia.controller.request.TarefaRequestDTO;
 import com.github.diogenesssantos.facilittecnologia.exception.TarefaNaoLocalizadaException;
 import com.github.diogenesssantos.facilittecnologia.model.Status;
 import com.github.diogenesssantos.facilittecnologia.model.Tarefa;
 import com.github.diogenesssantos.facilittecnologia.repository.TarefaRepository;
+import com.github.diogenesssantos.facilittecnologia.util.ValidaHoraUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -33,7 +37,7 @@ public class TarefaService {
 
         return repository.findById(id).orElseThrow(
                 () -> new TarefaNaoLocalizadaException(
-                        String.format("A tarefa com o id [%s] não existe no banco de dados.", id)));
+                        String.format("A tarefa com o id [%s] não existe no banco de dados.", id), "id"));
     }
 
     public Tarefa buscarPorTitulo(String titulo) {
@@ -42,7 +46,8 @@ public class TarefaService {
         return repository.buscarPorTitulo(titulo)
                 .orElseThrow(() ->
                         new TarefaNaoLocalizadaException(
-                                String.format("A tarefa com o titulo [%s] não existe no banco de dados.", titulo)));
+                                String.format("A tarefa com o titulo [%s] não existe no banco de dados.", titulo),
+                                "titulo"));
 
     }
 
@@ -52,7 +57,7 @@ public class TarefaService {
         return repository.buscarPorDescricao(descricao)
                 .orElseThrow(() ->
                         new TarefaNaoLocalizadaException(String.format("A tarefa com o descrição [%s] " +
-                                "não existe no banco de dados.", descricao)));
+                                "não existe no banco de dados.", descricao), "descricao"));
 
     }
 
@@ -90,6 +95,21 @@ public class TarefaService {
     }
 
 
+    @Transactional
+    public Tarefa atualizar(Tarefa tarefaBD, TarefaRequestDTO tarefaRequestDTO) {
+        if (tarefaRequestDTO.titulo() != null) tarefaBD.setTitulo(tarefaRequestDTO.titulo());
+        if (tarefaRequestDTO.descricao() != null) tarefaBD.setDescricao(tarefaRequestDTO.descricao());
+        if (tarefaRequestDTO.responsavel() != null) tarefaBD.setResponsavel(tarefaRequestDTO.responsavel());
+        if (tarefaRequestDTO.status() != null) tarefaBD.setStatus(tarefaRequestDTO.status());
+        if (tarefaRequestDTO.dataLimite() != null) {
+            ValidaHoraUtil.futuroOuThrows(tarefaRequestDTO.dataLimite());
+            tarefaBD.setDataAtualizacao(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+            tarefaBD.setDataLimite(tarefaRequestDTO.dataLimite());
+        }
+
+        return salvar(tarefaBD);
+    }
+
     private void atualizar(Tarefa tarefaAtual, Tarefa tarefaAtualizada) {
         tarefaAtual.setTitulo(tarefaAtualizada.getTitulo());
         tarefaAtual.setDescricao(tarefaAtualizada.getDescricao());
@@ -102,5 +122,4 @@ public class TarefaService {
     private void atualizar(Tarefa tarefaAtual, Status statusAtualizado) {
         tarefaAtual.setStatus(statusAtualizado);
     }
-
 }
