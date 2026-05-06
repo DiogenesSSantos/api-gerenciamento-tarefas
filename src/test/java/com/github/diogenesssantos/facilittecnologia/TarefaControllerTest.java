@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.diogenesssantos.facilittecnologia.controller.TarefaController;
 import com.github.diogenesssantos.facilittecnologia.controller.request.TarefaRequestDTO;
+import com.github.diogenesssantos.facilittecnologia.exception.CampoInvalidoException;
 import com.github.diogenesssantos.facilittecnologia.exception.TarefaNaoLocalizadaException;
 import com.github.diogenesssantos.facilittecnologia.exceptionhandller.Problema;
 import com.github.diogenesssantos.facilittecnologia.model.Status;
@@ -26,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -151,7 +153,7 @@ public class TarefaControllerTest {
                 .andExpect(jsonPath("$.statusCode").value(404))
                 .andExpect(jsonPath("$.classException").value(TarefaNaoLocalizadaException
                         .class.getSimpleName()));
-        Assert.assertNotNull(Problema);
+        assertNotNull(Problema);
     }
 
 
@@ -196,7 +198,7 @@ public class TarefaControllerTest {
                 .andExpect(jsonPath("$.statusCode").value(404))
                 .andExpect(jsonPath("$.classException").value(TarefaNaoLocalizadaException
                         .class.getSimpleName()));
-        Assert.assertNotNull(Problema);
+        assertNotNull(Problema);
     }
 
 
@@ -242,7 +244,24 @@ public class TarefaControllerTest {
                 .andExpect(jsonPath("$.statusCode").value(404))
                 .andExpect(jsonPath("$.classException").value(TarefaNaoLocalizadaException
                         .class.getSimpleName()));
-        Assert.assertNotNull(Problema);
+        assertNotNull(Problema);
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar um JSON contendo um list tarefa," +
+            " quando solicitar uma requisição GET no /tarefas/status.")
+    void deve_Retornar_Uma_Tarefa_Quando_Fazer_uma_Requisicao_GET_tarefas_status() throws Exception {
+        var statusExpectativa = Status.FAZER;
+
+        given(mockTarefaService.buscarPorStatus(any(Status.class))).willAnswer(invocation ->
+                mockListTarefa);
+
+        var response = mockMvc.perform(get("/tarefas/status")
+                .param("status", statusExpectativa.name()));
+
+        response.andDo(print())
+                .andExpect(status().isOk());
     }
 
 
@@ -274,7 +293,7 @@ public class TarefaControllerTest {
 
 
     @Test
-    @DisplayName("Deve retornar um JSON contendo uma Tarefa com o campo atualizado," +
+    @DisplayName("Deve retornar um JSON contendo uma Tarefa atualizada parcial ou por completo," +
             " quando solicitar uma requisição PATCH no /tarefas/id/{id}.")
     void deve_Retornar_Uma_Tarefa_Com_Campo_Atualizado_Quando_fazer_uma_Requisicao_PATCH_tarefas_id()
             throws Exception {
@@ -310,6 +329,90 @@ public class TarefaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(idExpectativa))
                 .andExpect(jsonPath("$.titulo").value(tarefaRequestDTO.titulo()));
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar um JSON contendo uma Tarefa atualizada parcial ou por completo," +
+            " quando solicitar uma requisição PATCH no /tarefas/titulo.")
+    void deve_Retornar_Uma_Tarefa_Atualizada_Parcial_Ou_Por_Completa_Quando_fazer_uma_Requisicao_PATCH_tarefas_titulo()
+            throws Exception {
+
+        var campoTituloExpectativa = "Atualizando titulo";
+        var tarefaRequestDTO = new TarefaRequestDTO("campoTituloAtualizadaExpectativa",
+                null,
+                null,
+                null,
+                null);
+
+        given(mockTarefaService.buscarPorTitulo(any(String.class)))
+                .willAnswer(invocation -> {
+                    Tarefa mocktarefaBD = mockTarefa;
+                    mocktarefaBD.setId(1L);
+                    return mocktarefaBD;
+                }).getMock();
+
+        given(mockTarefaService.atualizar(any(Tarefa.class), any(TarefaRequestDTO.class)))
+                .willAnswer(invocation -> {
+                    Tarefa mocktarefaBD = invocation.getArgument(0);
+                    TarefaRequestDTO mockTarefaRequestDTO = invocation.getArgument(1);
+
+                    if (mockTarefaRequestDTO.titulo() != null) mocktarefaBD.setTitulo(mockTarefaRequestDTO.titulo());
+                    return mocktarefaBD;
+                });
+
+        var response = mockMvc.perform(patch("/tarefas/titulo").param("titulo", campoTituloExpectativa)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(tarefaRequestDTO)));
+
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.titulo").value(tarefaRequestDTO.titulo()));
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar um JSON contendo uma Tarefa atualizada parcial ou por completo," +
+            " quando solicitar uma requisição PATCH no /tarefas/descricao.")
+    void deve_Retornar_Uma_Tarefa_Atualizada_Parcial_Ou_Por_Completa_Quando_fazer_uma_Requisicao_PATCH_tarefas_descricao()
+            throws Exception {
+
+        var descricaoExpectativa = "Refatore a descricao";
+        var tarefaRequestDTO = new TarefaRequestDTO(null,
+                "Atualizando a descrição para melhor legibilidade.",
+                null,
+                null,
+                null);
+
+        given(mockTarefaService.buscarPorDescricao(any(String.class)))
+                .willAnswer(invocation -> {
+                    Tarefa mocktarefaBD = mockTarefa;
+                    mocktarefaBD.setId(1L);
+                    return mocktarefaBD;
+                }).getMock();
+
+        given(mockTarefaService.atualizar(any(Tarefa.class), any(TarefaRequestDTO.class)))
+                .willAnswer(invocation -> {
+                    Tarefa mocktarefaBD = invocation.getArgument(0);
+                    TarefaRequestDTO mockTarefaRequestDTO = invocation.getArgument(1);
+
+                    if (mockTarefaRequestDTO.descricao() != null) {
+                        mocktarefaBD.setDescricao(mockTarefaRequestDTO.descricao());
+                    }
+
+                    return mocktarefaBD;
+                });
+
+        var response = mockMvc.perform(patch("/tarefas/descricao").param("descricao",
+                        descricaoExpectativa)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(tarefaRequestDTO)));
+
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.descricao").value(tarefaRequestDTO.descricao()));
     }
 
 
