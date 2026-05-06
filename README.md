@@ -129,7 +129,7 @@ services:
 
 👉 [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
-3. Fazendo requisição utilizando uma ferramenta de desenvolvimento (Postman, insomia, etc...) copie o link abaixo.
+3. Fazendo requisição utilizando uma ferramenta de desenvolvimento (Postman, Insomnia, etc...) copie o link abaixo.
 
 👉 [http://localhost:8080/](http://localhost:8080) e o determinado end-point abaixo.
 
@@ -184,6 +184,21 @@ services:
 - **Autenticação para apenas administradores e cargo de liderança posso criar tarefas.**
 
 ---
+
+##   Importar collection Postman a partir do OpenAPI 
+
+```
+Importar collection Postman a partir do OpenAPI
+
+. Inicie a API localmente.
+2. No Postman: Import → Link → cole http://localhost:8080/v3/api-docs → Import.
+3. Execute POST /api/auth/login, copie o token e cole em `jwt`.
+4. Teste os endpoints protegidos com header Authorization: Bearer {{jwt}}.
+5. Para importar manualmente, copie o arquivo da raiz do projeto docs/openapi e use Import → Upload Files.
+
+```
+---
+
 
 Swagger para documentação interativa — facilita avaliação do desafio.
 ---
