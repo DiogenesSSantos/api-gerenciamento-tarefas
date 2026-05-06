@@ -3,7 +3,7 @@ package com.github.diogenesssantos.facilittecnologia.docs;
 public interface TarefaRepresentacaoOpenAPI {
 
     String BAD_REQUEST_400_TITULO = """         
-           
+            
             {
               "statusCode": 400,
               "mensagem": "O campo titulo não poder ser vázio",
@@ -11,8 +11,9 @@ public interface TarefaRepresentacaoOpenAPI {
               "classeException": "CampoInvalidoException",
               "timeStamp": "2026-05-04T21:20:57.8320543"
             }
-           
+            
             """;
+
 
     String BAD_REQUEST_400_DESCRICAO = """
             
@@ -26,6 +27,7 @@ public interface TarefaRepresentacaoOpenAPI {
             
             """;
 
+
     String BAD_REQUEST_400_RESPONSAVEL = """
             
              {
@@ -37,6 +39,7 @@ public interface TarefaRepresentacaoOpenAPI {
             }
             
             """;
+
 
     String BAD_REQUEST_400_STATUS = """
             
@@ -50,6 +53,7 @@ public interface TarefaRepresentacaoOpenAPI {
             
             """;
 
+
     String BAD_REQUEST_400_DATA_LIMITE = """
             
             {
@@ -59,8 +63,9 @@ public interface TarefaRepresentacaoOpenAPI {
               "classeException": "CampoInvalidoException",
               "timeStamp": "2026-05-04T21:17:08.9443613"
             }
-
+            
             """;
+
 
     String NOT_FOUND_404 = """
             
@@ -74,6 +79,7 @@ public interface TarefaRepresentacaoOpenAPI {
             
             """;
 
+
     String NOT_FOUND_TITULO_404 = """
             
             {
@@ -86,6 +92,7 @@ public interface TarefaRepresentacaoOpenAPI {
             
             """;
 
+
     String NOT_FOUND_DESCRICAO_404 = """
             
             {
@@ -97,6 +104,7 @@ public interface TarefaRepresentacaoOpenAPI {
             }
             
             """;
+
 
     String NOT_CONTENT = "";
 

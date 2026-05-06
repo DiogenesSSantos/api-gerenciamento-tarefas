@@ -9,14 +9,13 @@ public enum Status {
     CONCLUIDO("Concluido")
     ;
 
-
+    private String nome;
 
 
     Status(String nome) {
         this.nome = nome;
     }
 
-    private String nome;
 
     public static void validoOuThrows(Status status) {
         if (status == null) throw new CampoInvalidoException(

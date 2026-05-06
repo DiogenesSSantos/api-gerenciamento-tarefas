@@ -7,12 +7,11 @@ import com.github.diogenesssantos.facilittecnologia.docs.TarefaDocumentacaoOpenA
 import com.github.diogenesssantos.facilittecnologia.model.Status;
 import com.github.diogenesssantos.facilittecnologia.model.Tarefa;
 import com.github.diogenesssantos.facilittecnologia.service.TarefaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.PublicKey;
 import java.util.List;
 
 @RestController
@@ -26,6 +25,7 @@ public class TarefaController implements TarefaDocumentacaoOpenAPI {
         this.tarefaService = tarefaService;
     }
 
+
     @GetMapping
     public ResponseEntity<List<TarefaResponseDTO>> buscarTodas() {
         var listTarefaBD = tarefaService.buscarTodas();
@@ -34,20 +34,27 @@ public class TarefaController implements TarefaDocumentacaoOpenAPI {
         return ResponseEntity.status(HttpStatus.OK).body(listTarefaResponseDTO);
     }
 
-    @GetMapping("/status")
-    public ResponseEntity<List<TarefaResponseDTO>> buscarTodasPorStatus(@RequestParam(name = "status")
-                                                                        Status status) {
-        Status.validoOuThrows(status);
-        var listTarefaBD = tarefaService.buscarPorStatus(status);
-        var listTarefaResponseDTO = AssemblerTarefa.listModelToListDTO(listTarefaBD);
 
-        return ResponseEntity.status(HttpStatus.OK).body(listTarefaResponseDTO);
+    @GetMapping("/id/{id}")
+    public ResponseEntity<TarefaResponseDTO> buscarPorId(@PathVariable(name = "id") Long id) {
+        var listTarefaBD = tarefaService.buscarPorId(id);
+        var tarefaResponseDTO = AssemblerTarefa.modelToDTO(listTarefaBD);
+
+        return ResponseEntity.status(HttpStatus.OK).body(tarefaResponseDTO);
     }
 
-    @GetMapping("/descricao")
-    public ResponseEntity<TarefaResponseDTO> buscarTodasPorStatus(@RequestParam(name = "descricao")
-                                                                  String descricao) {
 
+    @GetMapping("/titulo")
+    public ResponseEntity<TarefaResponseDTO> buscarPorTitulo(@RequestParam(name = "titulo") String titulo) {
+        var listTarefaBD = tarefaService.buscarPorTitulo(titulo);
+        var tarefaResponseDTO = AssemblerTarefa.modelToDTO(listTarefaBD);
+
+        return ResponseEntity.status(HttpStatus.OK).body(tarefaResponseDTO);
+    }
+
+
+    @GetMapping("/descricao")
+    public ResponseEntity<TarefaResponseDTO> buscarPorDescricao(@RequestParam(name = "descricao") String descricao) {
         var listTarefaBD = tarefaService.buscarPorDescricao(descricao);
         var tarefaResponseDTO = AssemblerTarefa.modelToDTO(listTarefaBD);
 
@@ -55,31 +62,65 @@ public class TarefaController implements TarefaDocumentacaoOpenAPI {
     }
 
 
+    @GetMapping("/status")
+    public ResponseEntity<List<TarefaResponseDTO>> buscarTodasPorStatus(@RequestParam(name = "status") Status status) {
+        Status.validoOuThrows(status);
+        var listTarefaBD = tarefaService.buscarPorStatus(status);
+        var listTarefaResponseDTO = AssemblerTarefa.listModelToListDTO(listTarefaBD);
+
+        return ResponseEntity.status(HttpStatus.OK).body(listTarefaResponseDTO);
+    }
+
+
     @PostMapping
-    public ResponseEntity<TarefaResponseDTO> salvar(@RequestBody TarefaRequestDTO tarefaRequestDTO) {
-        Tarefa tarefa = AssemblerTarefa.dtoToModel(tarefaRequestDTO);
+    public ResponseEntity<TarefaResponseDTO> salvar(@RequestBody @Valid TarefaRequestDTO tarefaReqDTO) {
+        Tarefa tarefa = AssemblerTarefa.dtoToModel(tarefaReqDTO);
         Tarefa TarefaBD = tarefaService.salvar(tarefa);
         TarefaResponseDTO tarefaResponseDTO = AssemblerTarefa.modelToDTO(TarefaBD);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(tarefaResponseDTO);
     }
 
-    @PatchMapping("/{id}")
+
+    @PatchMapping("/id/{id}")
     public ResponseEntity<TarefaResponseDTO> atualizarPorId(@PathVariable(name = "id") Long id,
-                                                            @RequestBody TarefaRequestDTO tarefaRequestDTO) {
+                                                            @RequestBody TarefaRequestDTO tarefaReqDTO) {
         Tarefa tarefaBD = tarefaService.buscarPorId(id);
-        tarefaBD = tarefaService.atualizar(tarefaBD, tarefaRequestDTO);
+        tarefaBD = tarefaService.atualizar(tarefaBD, tarefaReqDTO);
         TarefaResponseDTO tarefaResponseDTO = AssemblerTarefa.modelToDTO(tarefaBD);
 
         return ResponseEntity.status(HttpStatus.OK).body(tarefaResponseDTO);
     }
 
+
+    @PatchMapping("/titulo")
+    public ResponseEntity<TarefaResponseDTO> atualizarPorTitulo(@RequestParam(name = "titulo") String titulo,
+                                                                @RequestBody TarefaRequestDTO tarefaReqDTO) {
+        Tarefa tarefaBD = tarefaService.buscarPorTitulo(titulo);
+        Tarefa tarefaAtualizadaBD = tarefaService.atualizar(tarefaBD, tarefaReqDTO);
+        TarefaResponseDTO tarefaResponseDTO = AssemblerTarefa.modelToDTO(tarefaAtualizadaBD);
+
+        return ResponseEntity.status(HttpStatus.OK).body(tarefaResponseDTO);
+    }
+
+
+    @PatchMapping("/descricao")
+    public ResponseEntity<TarefaResponseDTO> atualizarPorDescricao(@RequestParam(name = "descricao") String descricao,
+                                                                   @RequestBody TarefaRequestDTO tarefaReqDTO) {
+        Tarefa tarefaBD = tarefaService.buscarPorDescricao(descricao);
+        tarefaBD = tarefaService.atualizar(tarefaBD, tarefaReqDTO);
+        TarefaResponseDTO tarefaResponseDTO = AssemblerTarefa.modelToDTO(tarefaBD);
+
+        return ResponseEntity.status(HttpStatus.OK).body(tarefaResponseDTO);
+    }
+
+
     @PatchMapping("/status/{id}")
     public ResponseEntity<TarefaResponseDTO> atualizarStatusPorId(@PathVariable(name = "id") Long id,
-                                                                  @RequestBody TarefaRequestDTO tarefaRequestDTO) {
-        Status.validoOuThrows(tarefaRequestDTO.status());
+                                                                  @RequestBody TarefaRequestDTO tarefaReqDTO) {
+        Status.validoOuThrows(tarefaReqDTO.status());
         Tarefa tarefaBD = tarefaService.buscarPorId(id);
-        tarefaBD = tarefaService.atualizar(tarefaBD, tarefaRequestDTO);
+        tarefaBD = tarefaService.atualizar(tarefaBD, tarefaReqDTO);
         TarefaResponseDTO tarefaResponseDTO = AssemblerTarefa.modelToDTO(tarefaBD);
 
         return ResponseEntity.status(HttpStatus.OK).body(tarefaResponseDTO);

@@ -10,13 +10,13 @@ public record Problema(
         int statusCode,
         String mensagem,
         String mensagemUsuario,
-        String classeException,
+        String classException,
         LocalDateTime timeStamp,
 
         List<ErrorCampos> errorsCampos
 ) {
 
-    record ErrorCampos(String field, String message ) {}
+    record ErrorCampos(String campo, String mensagem ) {}
 
 
 }

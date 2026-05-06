@@ -6,7 +6,7 @@ import com.github.diogenesssantos.facilittecnologia.util.ValidaHoraUtil;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime ;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -16,7 +16,6 @@ public class Tarefa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String titulo;
     private String descricao;
     private String responsavel;
@@ -24,20 +23,13 @@ public class Tarefa {
     @Enumerated(EnumType.STRING)
     @Column(name = "t_status")
     private Status status;
-
-    @Column(columnDefinition = "TIMESTAMP(0)")
-    private LocalDateTime  dataCriacao;
-
-    @Column(columnDefinition = "TIMESTAMP(0)")
-    private LocalDateTime  dataAtualizacao;
-
-    @Column(columnDefinition = "TIMESTAMP(0)")
-    private LocalDateTime  dataLimite;
+    private LocalDateTime dataCriacao;
+    private LocalDateTime dataAtualizacao;
+    private LocalDateTime dataLimite;
 
 
     private Tarefa() {
     }
-
 
     /**
      * Construtor privado — use o método estático {@link Tarefa.Builder} para criar instâncias.
@@ -69,8 +61,8 @@ public class Tarefa {
      * @param dataLimite      instante limite para conclusão da tarefa
      * @see Tarefa.Builder
      */
-    private Tarefa(String titulo, String descricao, String responsavel, Status status, LocalDateTime  dataCriacao,
-                   LocalDateTime  dataAtualizacao, LocalDateTime  dataLimite) {
+    private Tarefa(String titulo, String descricao, String responsavel, Status status, LocalDateTime dataCriacao,
+                   LocalDateTime dataAtualizacao, LocalDateTime dataLimite) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.responsavel = responsavel;
@@ -81,28 +73,18 @@ public class Tarefa {
     }
 
 
-    /*
-    Refatorar para uma classe utilitária.
- */
-//    public  OffsetDateTime getDataCriacao(){
-//       return dataCriacao.atOffset(ZoneOffset.UTC)
-//               .atZoneSameLocalDateTime (ZoneId.of("America/Sao_Paulo"))
-//               .toOffsetDateTime();
-//    }
-//
-
-
     public static class Builder {
         private String titulo;
         private String descricao;
         private String responsavel;
         private Status status;
-        private LocalDateTime  dataCriacao;
-        private LocalDateTime  dataAtualizacao;
-        private LocalDateTime  dataLimite;
+        private LocalDateTime dataCriacao;
+        private LocalDateTime dataAtualizacao;
+        private LocalDateTime dataLimite;
 
         public Builder() {
         }
+
 
         public Builder titulo(String titulo) {
             if (titulo == null || titulo.isBlank()) {
@@ -122,6 +104,7 @@ public class Tarefa {
             this.descricao = descricao;
             return this;
         }
+
 
         public Builder responsavel(String responsavel) {
             if (responsavel == null || responsavel.isBlank()) {
@@ -143,7 +126,8 @@ public class Tarefa {
             return this;
         }
 
-        public Builder dataCriacao(LocalDateTime  dataCriacao) {
+
+        public Builder dataCriacao(LocalDateTime dataCriacao) {
             if (dataCriacao == null) {
                 throw new CampoInvalidoException("A data de criação tem que ser um periodo no tempo atual.", "dataCriacao");
             }
@@ -152,7 +136,8 @@ public class Tarefa {
             return this;
         }
 
-        public Builder dataAtualizacao(LocalDateTime  dataAtualizacao) {
+
+        public Builder dataAtualizacao(LocalDateTime dataAtualizacao) {
             if (dataAtualizacao == null) {
                 throw new CampoInvalidoException("A data de criação tem que ser em um periodo no tempo atual.", "dataAtualizacao");
             }
@@ -162,7 +147,7 @@ public class Tarefa {
         }
 
 
-        public Builder dataLimite(LocalDateTime  dataLimite) {
+        public Builder dataLimite(LocalDateTime dataLimite) {
             if (dataLimite == null) {
                 throw new CampoInvalidoException("O campo dataLimite deve ser em um periodo no tempo futuro.", "dataLimite");
             } else if (ValidaHoraUtil.isPassado(dataLimite))
@@ -190,11 +175,11 @@ public class Tarefa {
                     this.dataCriacao,
                     this.dataAtualizacao,
                     this.dataLimite);
+
         }
 
 
     }
-
 
 }
 

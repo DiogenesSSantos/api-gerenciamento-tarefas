@@ -13,7 +13,9 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestControllerAdvice
@@ -24,8 +26,6 @@ public class ExceptionHandllerGlobal {
     public ResponseEntity<Problema> TarefaNaoLocalizadaException(TarefaNaoLocalizadaException ex,
                                                                  WebRequest webRequest,
                                                                  HttpServletRequest httpServletRequest) {
-
-
         var problema = new Problema(
                 HttpStatus.NOT_FOUND.value(),
                 ex.getMessage(),
@@ -36,13 +36,12 @@ public class ExceptionHandllerGlobal {
                 null);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problema);
+
     }
 
-    @ExceptionHandler(CampoInvalidoException.class)
-    public ResponseEntity<Problema> CampoInvalidoException(CampoInvalidoException ex,
-                                                           WebRequest webRequest,
-                                                           HttpServletRequest request) {
 
+    @ExceptionHandler(CampoInvalidoException.class)
+    public ResponseEntity<Problema> CampoInvalidoException(CampoInvalidoException ex) {
         var problema = new Problema(
                 HttpStatus.BAD_REQUEST.value(),
                 ex.getMessage(),
@@ -53,13 +52,11 @@ public class ExceptionHandllerGlobal {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problema);
 
-
     }
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Problema> MethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-
         List<Problema.ErrorCampos> errorCampos = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -78,5 +75,18 @@ public class ExceptionHandllerGlobal {
 
     }
 
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Problema> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        var problemaPadrao = new Problema(
+                HttpStatus.BAD_REQUEST.value(),
+                "Campo formato inválido.",
+                "Algum campo do JSON  está com o formato inválido, revise a documentação.",
+                HttpMessageNotReadableException.class.getSimpleName(),
+                LocalDateTime.now(),
+                null);
+
+        return ResponseEntity.badRequest().body(problemaPadrao);
+    }
 
 }

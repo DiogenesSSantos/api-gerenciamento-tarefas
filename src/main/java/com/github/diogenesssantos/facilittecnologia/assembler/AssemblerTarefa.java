@@ -3,7 +3,9 @@ package com.github.diogenesssantos.facilittecnologia.assembler;
 
 import com.github.diogenesssantos.facilittecnologia.controller.request.TarefaRequestDTO;
 import com.github.diogenesssantos.facilittecnologia.controller.response.TarefaResponseDTO;
+import com.github.diogenesssantos.facilittecnologia.model.Status;
 import com.github.diogenesssantos.facilittecnologia.model.Tarefa;
+import com.github.diogenesssantos.facilittecnologia.util.ValidaHoraUtil;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -11,7 +13,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class AssemblerTarefa {
-
 
     public static TarefaResponseDTO modelToDTO(Tarefa tarefa) {
         return new TarefaResponseDTO(tarefa.getId(),
@@ -26,7 +27,6 @@ public class AssemblerTarefa {
     }
 
 
-
     public static List<TarefaResponseDTO> listModelToListDTO(List<Tarefa> tarefa) {
         return tarefa.stream()
                 .map(AssemblerTarefa::modelToDTO)
@@ -36,6 +36,7 @@ public class AssemblerTarefa {
 
 
     public static Tarefa dtoToModel(TarefaRequestDTO tarefaRequestDTO) {
+
         return new Tarefa.Builder()
                 .titulo(tarefaRequestDTO.titulo())
                 .descricao(tarefaRequestDTO.descricao())
@@ -47,4 +48,6 @@ public class AssemblerTarefa {
                 .build();
 
     }
+
+
 }

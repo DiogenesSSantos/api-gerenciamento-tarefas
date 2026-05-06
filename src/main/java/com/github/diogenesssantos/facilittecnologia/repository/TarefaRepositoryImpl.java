@@ -18,6 +18,7 @@ public class TarefaRepositoryImpl implements TarefaRepositoryCustom {
         this.entityManager = entityManager;
     }
 
+
     @Override
     public Optional<Tarefa> buscarPorTitulo(String titulo) {
         var builder = entityManager.getCriteriaBuilder();
@@ -33,6 +34,7 @@ public class TarefaRepositoryImpl implements TarefaRepositoryCustom {
         return !tarefa.isEmpty() ? Optional.of(tarefa.getFirst()) : Optional.empty();
     }
 
+
     @Override
     public Optional<Tarefa> buscarPorDescricao(String descricao) {
         var builder = entityManager.getCriteriaBuilder();
@@ -47,6 +49,7 @@ public class TarefaRepositoryImpl implements TarefaRepositoryCustom {
 
         return !tarefa.isEmpty() ? Optional.of(tarefa.getFirst()) : Optional.empty();
     }
+
 
     @Override
     public List<Tarefa> buscarPorStatus(Status status) {

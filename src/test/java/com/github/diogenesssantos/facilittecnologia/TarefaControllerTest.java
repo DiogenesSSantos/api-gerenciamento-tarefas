@@ -135,8 +135,9 @@ public class TarefaControllerTest {
 
     @Test
     @DisplayName("Deve retornar um JSON contendo uma Tarefa com o campo atualizado," +
-            " quando solicitar uma requisição PATCH no /tarefas/{id}.")
-    void deve_Retornar_Uma_Tarefa_Com_Campo__Atualizado_Quando_fazer_uma_Requisicao_PATCH_tarefas() throws Exception {
+            " quando solicitar uma requisição PATCH no /tarefas/id/{id}.")
+    void deve_Retornar_Uma_Tarefa_Com_Campo_Atualizado_Quando_fazer_uma_Requisicao_PATCH_tarefas_id()
+            throws Exception {
         var idExpectativa = 1;
         var campoTituloAtualizadaExpectativa = "Atualizando titulo";
         var tarefaRequestDTO = new TarefaRequestDTO(campoTituloAtualizadaExpectativa,
@@ -161,7 +162,7 @@ public class TarefaControllerTest {
                     return mocktarefaBD;
                 });
 
-        var response = mockMvc.perform(patch("/tarefas/{id}",idExpectativa)
+        var response = mockMvc.perform(patch("/tarefas/id/{id}",idExpectativa)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(tarefaRequestDTO)));
 
