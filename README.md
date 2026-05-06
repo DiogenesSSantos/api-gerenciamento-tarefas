@@ -150,7 +150,7 @@ faça requisições no end-points /tarefas.**
 
 | Método | Nome do endpoint     | Descrição                                                                           |
 |--------|----------------------|-------------------------------------------------------------------------------------|
-| POST   | /api/auth/login      | fazer o login na api, obrigatório para todos end-points o token JWT.                | 
+| POST   | /api/auth/login      | Login na api, obrigatório para todos end-points o token JWT.                        | 
 | POST   | /tarefas             | Cria uma nova tarefa.                                                               |
 | GET    | /tarefas             | Buscar todas tarefas registradas.                                                   | 
 | GET    | /tarefas/id/{id}     | Consulte informações de uma tarefa através de um``id`` .                            | 
@@ -160,7 +160,7 @@ faça requisições no end-points /tarefas.**
 | PATCH  | /tarefas/id/{id}     | Atualiza uma ou mais informação de uma determinada tarefa  pelo ``id``.             | 
 | PATCH  | /tarefas/titulo      | Atualiza uma ou mais informação de uma determinada tarefa  pelo``titulo``.          | 
 | PATCH  | /tarefas/descricao   | Atualiza uma ou mais informação de uma determinada tarefa  pela``descricao``.       | 
-| PATCH  | /tarefas/status/{id} | Atualiza campo status uma determinada tarefa pelo``id``, passando status atualizado.| 
+| PATCH  | /tarefas/status/{id} | Atualiza campo status uma determinada tarefa pelo``id``, passando status atualizado. | 
 
 ---
 ##  Decisões técnicas
