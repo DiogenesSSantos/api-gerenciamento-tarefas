@@ -21,7 +21,7 @@ O gerencia tarefas de forma eficiente, possibilitando organização dos seus afa
 ## 🛠 Tecnologias Utilizadas
 - **Java 21** → Linguagem consolidada no mercado.  
   👉 [Documentação oficial](https://docs.oracle.com/en/java/)
-- **Spring-Framework** →  framework open‑source robusto para a plataforma Java.
+- **Spring-Framework + Spring boot** →  framework open‑source robusto para a plataforma Java.
 
   👉 [Documentação oficial](https://spring.io/why-spring)
 
@@ -33,6 +33,9 @@ O gerencia tarefas de forma eficiente, possibilitando organização dos seus afa
 
 - **Docker** → Containerização para um deploy simples e consistente.  
   👉 [Documentação oficial](https://docs.docker.com/)
+
+- **Copilot** → inteligência artificial:
+    👉 [Documentação oficial](https://learn.microsoft.com/pt-br/copilot/?utm_source=copilot.com/)
 
 ---
 
@@ -76,7 +79,7 @@ src/
 ### ▶️ Rodando a aplicação
 
 ```
-
+docker run -p 8080:8080 diogenesssantos/facilittecnologia:1.0
 ```
 ### Como acessar
 1. Certifique-se de que a aplicação está rodando (após seguir os passos em ["Como Rodar o Projeto"](#-como-rodar-o-projeto)).
@@ -91,7 +94,7 @@ src/
 
 > **⚠️ Atenção**
 >
-> Obrigatório fazer o login para acessar os end-points, necessitando do token JWT para acesso as end-points.
+> Obrigatório fazer o login para acessar os end-points, necessitando do token JWT para acesso aos end-points.
 ---
 
 **Faça um post http://localhost:8080/api/auth/login com o body abaixo, depois copie o JWT e faça requisições.**
