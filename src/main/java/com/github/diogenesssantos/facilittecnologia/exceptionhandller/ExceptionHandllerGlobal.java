@@ -23,9 +23,7 @@ public class ExceptionHandllerGlobal {
 
 
     @ExceptionHandler(TarefaNaoLocalizadaException.class)
-    public ResponseEntity<Problema> TarefaNaoLocalizadaException(TarefaNaoLocalizadaException ex,
-                                                                 WebRequest webRequest,
-                                                                 HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Problema> TarefaNaoLocalizadaException(TarefaNaoLocalizadaException ex) {
         var problema = new Problema(
                 HttpStatus.NOT_FOUND.value(),
                 ex.getMessage(),

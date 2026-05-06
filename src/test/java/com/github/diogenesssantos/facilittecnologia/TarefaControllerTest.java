@@ -1,13 +1,17 @@
 package com.github.diogenesssantos.facilittecnologia;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.diogenesssantos.facilittecnologia.controller.TarefaController;
 import com.github.diogenesssantos.facilittecnologia.controller.request.TarefaRequestDTO;
+import com.github.diogenesssantos.facilittecnologia.exception.TarefaNaoLocalizadaException;
+import com.github.diogenesssantos.facilittecnologia.exceptionhandller.Problema;
 import com.github.diogenesssantos.facilittecnologia.model.Status;
 import com.github.diogenesssantos.facilittecnologia.model.Tarefa;
 import com.github.diogenesssantos.facilittecnologia.service.TarefaService;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -107,6 +111,49 @@ public class TarefaControllerTest {
 
 
     @Test
+    @DisplayName("Deve retornar um JSON contendo uma tarefa," +
+            " quando solicitar uma requisição GET no /tarefas/id/{id}.")
+    void deve_Retornar_Uma_Tarefa_Quando_Fazer_uma_Requisicao_GET_tarefas_id() throws Exception {
+        var idExpectativa = 14L;
+
+        given(mockTarefaService.buscarPorId(any(Long.class))).willAnswer(invocation -> {
+            mockTarefa.setId(14L);
+
+            return mockTarefa;
+        });
+
+        var response = mockMvc.perform(get("/tarefas/id/{id}",idExpectativa));
+
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.id").value(idExpectativa));
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar um JSON contendo um Problema not found com exception TarefaNaoLocalizadaException," +
+            " quando solicitar uma requisição GET no /tarefas/id/{id} e o Id não correlacionar com uma tarefa.")
+    void deve_Retornar_Um_Problema_Quando_Fazer_uma_Requisicao_GET_tarefas_id_Com_id_Que_Nao_exista() throws Exception {
+        var idExpectativa = 14L;
+
+        given(mockTarefaService.buscarPorId(any(Long.class)))
+                .willThrow(new TarefaNaoLocalizadaException(
+                        String.format("A tarefa com o id [%s] não existe no banco de dados.", idExpectativa), "id"));
+
+        var response = mockMvc.perform(get("/tarefas/id/{id}",idExpectativa));
+        var body = response.andReturn().getResponse().getContentAsString();
+        Problema Problema = mapper.readValue(body, new TypeReference<>() {});
+
+        response.andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.statusCode").value(404))
+                .andExpect(jsonPath("$.classException").value(TarefaNaoLocalizadaException
+                        .class.getSimpleName()));
+        Assert.assertNotNull(Problema);
+    }
+
+    @Test
     @DisplayName("Deve retornar um JSON contendo uma Tarefa," +
             " quando solicitar uma requisição POST no /tarefas.")
     void deve_Retornar_Uma_Tarefa_Com_ID_Quando_fazer_uma_Requisicao_POST_tarefas() throws Exception {
@@ -114,9 +161,9 @@ public class TarefaControllerTest {
 
         given(mockTarefaService.salvar(any(Tarefa.class)))
                 .willAnswer(invocation -> {
-                   Tarefa mocktarefaBD = invocation.getArgument(0);
-                   mocktarefaBD.setId(1L);
-                   return mocktarefaBD;
+                    Tarefa mocktarefaBD = invocation.getArgument(0);
+                    mocktarefaBD.setId(1L);
+                    return mocktarefaBD;
                 });
 
         var response = mockMvc.perform(post("/tarefas")
@@ -162,7 +209,7 @@ public class TarefaControllerTest {
                     return mocktarefaBD;
                 });
 
-        var response = mockMvc.perform(patch("/tarefas/id/{id}",idExpectativa)
+        var response = mockMvc.perform(patch("/tarefas/id/{id}", idExpectativa)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(tarefaRequestDTO)));
 
@@ -203,7 +250,7 @@ public class TarefaControllerTest {
                     return mocktarefaBD;
                 });
 
-        var response = mockMvc.perform(patch("/tarefas/status/{id}",idExpectativa)
+        var response = mockMvc.perform(patch("/tarefas/status/{id}", idExpectativa)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(tarefaRequestDTO)));
 
