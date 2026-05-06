@@ -122,7 +122,7 @@ public class TarefaControllerTest {
             return mockTarefa;
         });
 
-        var response = mockMvc.perform(get("/tarefas/id/{id}",idExpectativa));
+        var response = mockMvc.perform(get("/tarefas/id/{id}", idExpectativa));
 
         response.andDo(print())
                 .andExpect(status().isOk())
@@ -141,9 +141,10 @@ public class TarefaControllerTest {
                 .willThrow(new TarefaNaoLocalizadaException(
                         String.format("A tarefa com o id [%s] não existe no banco de dados.", idExpectativa), "id"));
 
-        var response = mockMvc.perform(get("/tarefas/id/{id}",idExpectativa));
+        var response = mockMvc.perform(get("/tarefas/id/{id}", idExpectativa));
         var body = response.andReturn().getResponse().getContentAsString();
-        Problema Problema = mapper.readValue(body, new TypeReference<>() {});
+        Problema Problema = mapper.readValue(body, new TypeReference<>() {
+        });
 
         response.andDo(print())
                 .andExpect(status().isNotFound())
@@ -152,6 +153,98 @@ public class TarefaControllerTest {
                         .class.getSimpleName()));
         Assert.assertNotNull(Problema);
     }
+
+
+    @Test
+    @DisplayName("Deve retornar um JSON contendo uma tarefa," +
+            " quando solicitar uma requisição GET no /tarefas/titulo.")
+    void deve_Retornar_Uma_Tarefa_Quando_Fazer_uma_Requisicao_GET_tarefas_titulo() throws Exception {
+        var tituloExpectativa = "Facilit estágio desafio";
+
+        given(mockTarefaService.buscarPorTitulo(any(String.class))).willAnswer(invocation -> {
+            mockTarefa.setId(15L);
+            return mockTarefa;
+        });
+
+        var response = mockMvc.perform(get("/tarefas/titulo")
+                .param("titulo", tituloExpectativa));
+
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNotEmpty());
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar um JSON contendo um Problema not found com a exception TarefaNaoLocalizadaException," +
+            " quando solicitar uma requisição GET no /tarefas/titulo e o titulo não correlacionar com uma tarefa.")
+    void deve_Retornar_Um_Problema_Quando_Fazer_uma_Requisicao_GET_tarefas_titulo() throws Exception {
+        var tituloExpectativa = "Facilit estágio desafio";
+
+        given(mockTarefaService.buscarPorTitulo(any(String.class)))
+                .willThrow(new TarefaNaoLocalizadaException(
+                        String.format("A tarefa com o titulo [%s] não existe no banco de dados.", tituloExpectativa),
+                        "titulo"));
+
+        var response = mockMvc.perform(get("/tarefas/titulo").param("titulo", tituloExpectativa));
+        var body = response.andReturn().getResponse().getContentAsString();
+        Problema Problema = mapper.readValue(body, new TypeReference<>() {
+        });
+
+        response.andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.statusCode").value(404))
+                .andExpect(jsonPath("$.classException").value(TarefaNaoLocalizadaException
+                        .class.getSimpleName()));
+        Assert.assertNotNull(Problema);
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar um JSON contendo uma tarefa," +
+            " quando solicitar uma requisição GET no /tarefas/descricao.")
+    void deve_Retornar_Uma_Tarefa_Quando_Fazer_uma_Requisicao_GET_tarefas_descricao() throws Exception {
+        var descricaoExpectativa = "Refatorar";
+
+        given(mockTarefaService.buscarPorDescricao(any(String.class))).willAnswer(invocation -> {
+            mockTarefa.setId(15L);
+            return mockTarefa;
+        });
+
+        var response = mockMvc.perform(get("/tarefas/descricao")
+                .param("descricao", descricaoExpectativa));
+
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNotEmpty());
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar um JSON contendo um Problema not found com a exception TarefaNaoLocalizadaException, " +
+            "quando solicitar uma requisição GET no /tarefas/descricao e a descricao não correlacionar com uma tarefa.")
+    void deve_Retornar_Um_Problema_Quando_Fazer_uma_Requisicao_GET_tarefas_descricao() throws Exception {
+        var descricaoExpectativa = "desafio";
+
+        given(mockTarefaService.buscarPorDescricao(any(String.class)))
+                .willThrow(new TarefaNaoLocalizadaException(
+                        String.format("A tarefa com o descricao [%s] não existe no banco de dados.",
+                                descricaoExpectativa), "descricao"));
+
+        var response = mockMvc.perform(get("/tarefas/descricao").param("descricao",
+                descricaoExpectativa));
+        var body = response.andReturn().getResponse().getContentAsString();
+        Problema Problema = mapper.readValue(body, new TypeReference<>() {
+        });
+
+        response.andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.statusCode").value(404))
+                .andExpect(jsonPath("$.classException").value(TarefaNaoLocalizadaException
+                        .class.getSimpleName()));
+        Assert.assertNotNull(Problema);
+    }
+
 
     @Test
     @DisplayName("Deve retornar um JSON contendo uma Tarefa," +
