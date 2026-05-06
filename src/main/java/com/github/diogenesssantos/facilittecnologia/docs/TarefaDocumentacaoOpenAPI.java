@@ -23,8 +23,8 @@ public interface TarefaDocumentacaoOpenAPI {
 
 
     @Operation(summary = "Buscar todas tarefas no banco de dados.",
-            description = "Retorna uma lista de JSON com todas tarefas registrada " +
-                    "no banco de dados ou uma lista vazia[ ] caso não contenha nenhuma tarefa.",
+            description = "Retorna uma lista de JSON com todas tarefas registrada, " +
+                    " ou uma lista vazia[ ] caso não contenha nenhuma tarefa.",
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(
@@ -33,13 +33,19 @@ public interface TarefaDocumentacaoOpenAPI {
                                             schema = @Schema(implementation = TarefaResponseDTO.class))
                             )
                     ),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(example = LoginRepresentacaoOpenAPI.UNAUTHORIZED))
+
+                    ),
                     @ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
             })
     ResponseEntity<List<TarefaResponseDTO>> buscarTodas();
 
 
     @Operation(summary = "Salvar uma tarefa no banco de dados.",
-            description = "Retorna uma JSON de tarefa após criada com todos os campos válidos.",
+            description = "Retorna um JSON de tarefa após criada com todos os campos válidos.",
             responses = {
                     @ApiResponse(description = "Create", responseCode = "201",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -47,15 +53,21 @@ public interface TarefaDocumentacaoOpenAPI {
                     ,
                     @ApiResponse(description = "Bad request", responseCode = "400",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(example = TarefaRepresentacaoOpenAPI.BAD_REQUEST_400_TITULO)))
-                    , @ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
+                                    schema = @Schema(example = TarefaRepresentacaoOpenAPI.BAD_REQUEST_400_TITULO))),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(example = LoginRepresentacaoOpenAPI.UNAUTHORIZED))
+
+                    ),
+                    @ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
             })
     ResponseEntity<TarefaResponseDTO> salvar(TarefaRequestDTO tarefaReqDTO);
 
 
     @Operation(summary = "Buscar todas as tarefa no banco de dados pelo status.",
-            description = "Retorna uma lista de JSON com todas tarefas " +
-                    "no banco de dados dado o status correspondente " +
+            description = "Retorna uma list de JSON com todas tarefa " +
+                    " com status correspondente, " +
                     "ou uma lista vazia[ ] caso não contenha nenhuma tarefa.",
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
@@ -64,36 +76,52 @@ public interface TarefaDocumentacaoOpenAPI {
                     ,
                     @ApiResponse(description = "Bad request", responseCode = "400",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(example = TarefaRepresentacaoOpenAPI.BAD_REQUEST_400_STATUS)))
-                    , @ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
+                                    schema = @Schema(example = TarefaRepresentacaoOpenAPI.BAD_REQUEST_400_STATUS))),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(example = LoginRepresentacaoOpenAPI.UNAUTHORIZED))
+
+                    ),
+                    @ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
             })
     ResponseEntity<List<TarefaResponseDTO>> buscarTodasPorStatus(Status status);
 
 
     @Operation(summary = "Buscar a tarefa no banco de dados pelo id.",
-            description = "Retorna um JSON com uma tarefas " +
-                    "no banco de dados dado o descricao correspondente.",
+            description = "Retorna um JSON com uma tarefa, correspondente ao id.",
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     array = @ArraySchema(schema = @Schema(implementation = TarefaResponseDTO.class))))
                     ,
+                    @ApiResponse(description = "Unauthorized", responseCode = "401",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(example = LoginRepresentacaoOpenAPI.UNAUTHORIZED))
+
+                    ),
                     @ApiResponse(description = "Not found", responseCode = "404",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(example = TarefaRepresentacaoOpenAPI.NOT_FOUND_404)))
-                    , @ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
+                                    schema = @Schema(example = TarefaRepresentacaoOpenAPI.NOT_FOUND_404))),
+
+                    @ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
             })
     ResponseEntity<TarefaResponseDTO> buscarPorId(Long id);
 
 
     @Operation(summary = "Buscar a tarefa no banco de dados pela descrição.",
-            description = "Retorna um JSON com uma tarefas " +
-                    "no banco de dados dado o descricao correspondente.",
+            description = "Retorna um JSON com uma tarefa, correspondente a descricao.",
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = TarefaResponseDTO.class))))
-                    ,
+                                    array = @ArraySchema(schema = @Schema(implementation = TarefaResponseDTO.class)))),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(example = LoginRepresentacaoOpenAPI.UNAUTHORIZED))
+
+                    ),
                     @ApiResponse(description = "Not found", responseCode = "404",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(example = TarefaRepresentacaoOpenAPI.NOT_FOUND_DESCRICAO_404)))
@@ -102,24 +130,28 @@ public interface TarefaDocumentacaoOpenAPI {
     ResponseEntity<TarefaResponseDTO> buscarPorDescricao(String descricao);
 
 
-    @Operation(summary = "Buscar a tarefa no banco de dados pela titulo.",
-            description = "Retorna um JSON com uma tarefas " +
-                    "no banco de dados dado o descricao correspondente..",
+    @Operation(summary = "Buscar a tarefa no banco de dados pelo titulo.",
+            description = "Retorna um JSON com uma tarefa, correspondente ao titulo.",
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = TarefaResponseDTO.class))))
-                    ,
+                                    array = @ArraySchema(schema = @Schema(implementation = TarefaResponseDTO.class)))),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(example = LoginRepresentacaoOpenAPI.UNAUTHORIZED))
+
+                    ),
                     @ApiResponse(description = "Not found", responseCode = "404",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(example = TarefaRepresentacaoOpenAPI.BAD_REQUEST_400_TITULO)))
+                                    schema = @Schema(example = TarefaRepresentacaoOpenAPI.NOT_FOUND_TITULO_404)))
                     , @ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
             })
     ResponseEntity<TarefaResponseDTO> buscarPorTitulo(String descricao);
 
 
     @Operation(summary = "Atualizar uma tarefa no banco de dados pelo id.",
-            description = "Retorna uma JSON de tarefa após atualizar com campos válidos.",
+            description = "Retorna um JSON de tarefa atualizada, parcial ou completa correspondente ao id.",
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -128,6 +160,12 @@ public interface TarefaDocumentacaoOpenAPI {
                     @ApiResponse(description = "Bad request", responseCode = "400",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(example = TarefaRepresentacaoOpenAPI.BAD_REQUEST_400_TITULO))),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(example = LoginRepresentacaoOpenAPI.UNAUTHORIZED))
+
+                    ),
                     @ApiResponse(description = "Not found", responseCode = "404",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(example = TarefaRepresentacaoOpenAPI.NOT_FOUND_404)))
@@ -137,7 +175,7 @@ public interface TarefaDocumentacaoOpenAPI {
 
 
     @Operation(summary = "Atualizar status de uma tarefa no banco de dados pelo id.",
-            description = "Retorna uma JSON de tarefa após atualizar seu status como o campo válido.",
+            description = "Retorna um JSON de tarefa com status atualizada, correspondente ao id.",
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -146,6 +184,12 @@ public interface TarefaDocumentacaoOpenAPI {
                     @ApiResponse(description = "Bad request", responseCode = "400",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(example = TarefaRepresentacaoOpenAPI.BAD_REQUEST_400_STATUS))),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(example = LoginRepresentacaoOpenAPI.UNAUTHORIZED))
+
+                    ),
                     @ApiResponse(description = "Not found", responseCode = "404",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(example = TarefaRepresentacaoOpenAPI.NOT_FOUND_404)))
@@ -160,7 +204,7 @@ public interface TarefaDocumentacaoOpenAPI {
 
 
     @Operation(summary = "Atualizar uma tarefa no banco de dados pela descricao.",
-            description = "Retorna uma JSON de tarefa após atualizar pela descricao.",
+            description = "Retorna um JSON de tarefa atualizada, parcial ou completa correspondente a descricao.",
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -169,6 +213,12 @@ public interface TarefaDocumentacaoOpenAPI {
                     @ApiResponse(description = "Bad request", responseCode = "400",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(example = TarefaRepresentacaoOpenAPI.BAD_REQUEST_400_DESCRICAO))),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(example = LoginRepresentacaoOpenAPI.UNAUTHORIZED))
+
+                    ),
                     @ApiResponse(description = "Not found", responseCode = "404",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(example = TarefaRepresentacaoOpenAPI.NOT_FOUND_DESCRICAO_404)))
@@ -180,7 +230,7 @@ public interface TarefaDocumentacaoOpenAPI {
 
 
     @Operation(summary = "Atualizar uma tarefa no banco de dados pelo titulo.",
-            description = "Retorna uma JSON de tarefa após atualizar pelo titulo.",
+            description = "Retorna um JSON de tarefa atualizada, parcial ou completa correspondente ao titulo.",
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -189,6 +239,12 @@ public interface TarefaDocumentacaoOpenAPI {
                     @ApiResponse(description = "Bad request", responseCode = "400",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(example = TarefaRepresentacaoOpenAPI.BAD_REQUEST_400_TITULO))),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(example = LoginRepresentacaoOpenAPI.UNAUTHORIZED))
+
+                    ),
                     @ApiResponse(description = "Not found", responseCode = "404",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(example = TarefaRepresentacaoOpenAPI.NOT_FOUND_DESCRICAO_404)))
