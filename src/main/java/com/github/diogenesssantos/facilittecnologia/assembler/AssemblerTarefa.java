@@ -15,6 +15,8 @@ import java.util.List;
 public class AssemblerTarefa {
 
     public static TarefaResponseDTO modelToDTO(Tarefa tarefa) {
+        if (ValidaHoraUtil.isPassado(tarefa.getDataLimite())) tarefa.setStatus(Status.ATRASADO);
+
         return new TarefaResponseDTO(tarefa.getId(),
                 tarefa.getTitulo(),
                 tarefa.getDescricao(),

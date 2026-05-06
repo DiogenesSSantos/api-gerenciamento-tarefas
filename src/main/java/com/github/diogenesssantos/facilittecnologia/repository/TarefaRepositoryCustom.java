@@ -13,4 +13,6 @@ public interface TarefaRepositoryCustom {
     Optional<Tarefa> buscarPorTitulo(String titulo);
     Optional<Tarefa> buscarPorDescricao(String descricao);
     List<Tarefa>  buscarPorStatus(Status status);
+
+    Optional<Tarefa> buscarPorTituloEDescricao(String titulo, String descricao);
 }

@@ -65,6 +65,18 @@ public class TarefaService {
     }
 
 
+    public Tarefa buscarPorTituloEDescricao(String titulo, String descricao) {
+        if (descricao == null || titulo == null) {
+            throw new IllegalArgumentException("O campo descrição não pode ser nulo");
+        }
+
+        return repository.buscarPorTituloEDescricao(titulo, descricao)
+                .orElseThrow(() ->
+                new TarefaNaoLocalizadaException(String.format("A tarefa associada titulo e descricao " +
+                        "não existe no banco de dados.", ""), "titulo e descricao"));
+    }
+
+
     public List<Tarefa> buscarPorStatus(Status status) {
         return repository.buscarPorStatus(status);
 
@@ -85,5 +97,6 @@ public class TarefaService {
 
         return salvar(tarefaBD);
     }
+
 
 }

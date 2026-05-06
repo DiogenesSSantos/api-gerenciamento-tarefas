@@ -12,3 +12,7 @@ spring:
 
   flyway:
     locations: classpath:db/migration
+
+jwt:
+  secret: "uma-chave-muito-secreta-e-comprida-32+_caracteres_para_desafio_estagio_facilit"
+  expiration-ms: 3600000
