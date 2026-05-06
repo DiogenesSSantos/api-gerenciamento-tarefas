@@ -178,6 +178,20 @@ services:
 
 ---
 
+##  Utilização de IA (Copilot) no projeto ##
+
+
+- Configuração de ambiente, sem comprometer dados sensíveis. 
+- Criação de casos de teste.
+- Autocomplete e geração de código para teste com rapidez sem substituir a análise critica e testabilidade.
+- Leitura de problemas de stack trace, complexas para melhor entendimento e resolucionar o problema.
+- Refatoração e melhoria de legibilidade
+
+
+---
+
+
+
 ##  Melhorias
 - **Banco de dados mais seguro, robusto e independente (Mysql ou Postgres).**
 - **Endpoint para atribuir tarefa a usuário e histórico de mudanças e por quem foi alterada a tarefa.**
@@ -190,7 +204,7 @@ services:
 ```
 Importar collection Postman a partir do OpenAPI
 
-. Inicie a API localmente.
+1. Inicie a API localmente.
 2. No Postman: Import → Link → cole http://localhost:8080/v3/api-docs → Import.
 3. Execute POST /api/auth/login, copie o token e cole em `jwt`.
 4. Teste os endpoints protegidos com header Authorization: Bearer {{jwt}}.
