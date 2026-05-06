@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -289,6 +290,97 @@ public class TarefaControllerTest {
                 .andExpect(jsonPath("$.descricao").value(tarefaExpectativa.getDescricao()))
                 .andExpect(jsonPath("$.status").value(tarefaExpectativa.getStatus().name()))
                 .andExpect(jsonPath("$.dataLimite").value(tarefaExpectativa.getDataLimite().toString()));
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar um JSON contendo um Problema bad request com a exception MethodArgumentNotValidException," +
+            " quando solicitar uma requisição GET no /tarefas/descricao e a dataLimite estiver null.")
+    void deve_Retornar_Uma_Problema_Quando_fazer_uma_Requisicao_POST_tarefas_Com_Campo_dataLimite_null()
+            throws Exception {
+        var tarefaExpectativa = mockTarefa;
+        tarefaExpectativa.setDataLimite(null);
+
+        given(mockTarefaService.salvar(any(Tarefa.class)))
+                .willAnswer(invocation -> {
+                    Tarefa mocktarefaBD = invocation.getArgument(0);
+                    mocktarefaBD.setId(1L);
+                    return mocktarefaBD;
+                });
+
+        var response = mockMvc.perform(post("/tarefas")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(tarefaExpectativa)));
+        var body = response.andReturn().getResponse().getContentAsString();
+        Problema problema = mapper.readValue(body, new TypeReference<Problema>() {
+        });
+
+        response.andDo(print())
+                .andExpect(status().isBadRequest());
+
+        assertNotNull(problema);
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar um JSON contendo um Problema bad request com a exception HttpMessageNotReadableException," +
+            " quando solicitar uma requisição GET no /tarefas/descricao com algum campo do JSON mal formato inválido.")
+    void deve_Retornar_Uma_Problema_Quando_fazer_uma_Requisicao_POST_tarefas_Com_JSON_mal_formatado()
+            throws Exception {
+        var tarefaMalFormatadaJson = Map.of(
+                "titulo", "Facilit desafio estágio",
+                "descricao", "Melhorar legibilidade do código",
+                "responsavel", "Diogenes da Silva Santos",
+                "status", "PROGRESSO",
+                "dataLimite", "2026-05-15  formato data errado   10:30:00");
+
+        given(mockTarefaService.salvar(any(Tarefa.class)))
+                .willAnswer(invocation -> {
+                    Tarefa mocktarefaBD = invocation.getArgument(0);
+                    mocktarefaBD.setId(1L);
+                    return mocktarefaBD;
+                });
+
+        var response = mockMvc.perform(post("/tarefas")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(tarefaMalFormatadaJson)));
+        var body = response.andReturn().getResponse().getContentAsString();
+        Problema problema = mapper.readValue(body, new TypeReference<Problema>() {
+        });
+
+        response.andDo(print())
+                .andExpect(status().isBadRequest());
+
+        assertNotNull(problema);
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar um JSON contendo um Problema bad request com a exception CampoInvalidoException," +
+            " quando solicitar uma requisição GET no /tarefas/descricao com algum campo inválido.")
+    void deve_Retornar_Uma_Problema_Quando_fazer_uma_Requisicao_POST_tarefas_Com_Algum_Campo_invalido_para_regra_negocio()
+            throws Exception {
+        var tarefaCampoObrigatorioInvalido = mockTarefa;
+        mockTarefa.setTitulo("    ");
+
+        given(mockTarefaService.salvar(any(Tarefa.class)))
+                .willAnswer(invocation -> {
+                    Tarefa mocktarefaBD = invocation.getArgument(0);
+                    mocktarefaBD.setId(1L);
+                    return mocktarefaBD;
+                });
+
+        var response = mockMvc.perform(post("/tarefas")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(tarefaCampoObrigatorioInvalido)));
+        var body = response.andReturn().getResponse().getContentAsString();
+        Problema problema = mapper.readValue(body, new TypeReference<Problema>() {
+        });
+
+        response.andDo(print())
+                .andExpect(status().isBadRequest());
+
+        assertNotNull(problema);
     }
 
 
