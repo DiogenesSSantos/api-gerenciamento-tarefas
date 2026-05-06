@@ -14,7 +14,7 @@ Um serviço REST simples para criar, editar, buscar e gerenciar o status de tare
 ---
 
 ## 📖 Sobre o Projeto
-Aplicação backend para gerenciamento de tarefas (To‑Do). Permite criar tarefas, editar campos, alterar status, buscar por texto e filtrar por status. Pensada para ser simples, testável e documentada
+Aplicação backend para gerenciamento de tarefas (To‑Do). Permite criar tarefas, editar campos, alterar status, buscar por texto e filtrar por status. Pensada para ser simples, testável e documentada.
 
 ## ✨ Funcionalidades
 - **Listar tarefa**
@@ -56,7 +56,7 @@ Aplicação backend para gerenciamento de tarefas (To‑Do). Permite criar taref
 
 ---
 
-## 📐 Arquitetura do Projeto - !!! em construção.
+## 📐 Arquitetura do Projeto - em construção.
 ```tree
 src/
  ├── main/
@@ -72,9 +72,7 @@ src/
  │       └── (outros arquivos de configuração, mapeamentos, etc.)
  │
  └── test/
-     └── java/
-         └── br/com/expresscart/
-             └── (testes unitários e de integração)
+     └── java/....
 ```
 
 ---
@@ -139,7 +137,8 @@ services:
 > Obrigatório fazer o login para acessar os end-points, necessitando do token JWT para acesso aos end-points.
 ---
 
-**Faça um post http://localhost:8080/api/auth/login com o body abaixo, depois copie o JWT e faça requisições.**
+**Faça uma requisição post http://localhost:8080/api/auth/login com o body abaixo, depois copie o JWT e 
+faça requisições no end-points /tarefas.**
 ```
 {
   "nome": "facilit",
