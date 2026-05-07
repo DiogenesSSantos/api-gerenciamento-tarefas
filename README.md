@@ -16,6 +16,78 @@ Um serviço REST simples para criar, editar, buscar e gerenciar o status de tare
 ## 📖 Sobre o Projeto
 Aplicação backend para gerenciamento de tarefas (To‑Do). Permite criar tarefas, editar campos, alterar status, buscar por texto e filtrar por status. Pensada para ser simples, testável e documentada.
 
+---
+
+
+<div style="font-size:2.0em; font-weight:800; color:#b22222">⚠️ ALERTA</div>
+
+## Aviso Importante sobre o Endpoint /tarefas/status
+
+**Status:** **Aconselhável não utilização do endpoint** bug crítico conflitando dados.
+
+**Descrição:** O endpoint **GET /tarefas/status** apresenta um comportamento incorreto que está ocasionando respostas inconsistentes. Enquanto investigamos e corrigimos o problema, **não utilize** este endpoint em produção.
+
+---
+
+### Comportamento durante a investigação
+- **Resposta:** O endpoint retornará **HTTP 200** com um corpo não correspondente ao status desejado explicando o motivo.
+- **Logs:** Logs internos foram ativados para rastrear chamadas e facilitar a correção.
+
+---
+
+### Exemplo de resposta ao requisitar buscar por status FAZER, comportamento altera para atrasado tarefas que ja passaram da dataLimite.
+```json
+HTTP/1.1 200
+Content-Type: application/json
+
+[
+    {
+    "id": 1,
+    "titulo": "Facilit",
+    "descricao": "Descrição teste A",
+    "responsavel": "Diógenes Silva",
+    "status": "ATRASADO",
+    "dataCriacao": "2025-11-01T09:00:00",
+    "dataAtualizacao": "2025-11-01T09:00:00",
+    "dataLimite": "2026-01-01T09:00:00"
+    },
+    
+    {
+    "id": 6,
+    "titulo": "Teste de integração",
+    "descricao": "Criar testes para endpoints críticos",
+    "responsavel": "Beatriz Lima",
+    "status": "FAZER",
+    "dataCriacao": "2026-03-01T09:45:00",
+    "dataAtualizacao": "2026-03-01T09:45:00",
+    "dataLimite": "2026-09-01T09:45:00"
+    },
+    {
+    "id": 9,
+    "titulo": "Análise de performance",
+    "descricao": "Identificar gargalos de consulta",
+    "responsavel": "Pedro Henrique",
+    "status": "FAZER",
+    "dataCriacao": "2026-01-05T07:30:00",
+    "dataAtualizacao": "2026-01-06T08:00:00",
+    "dataLimite": "2026-06-01T07:30:00"
+    },
+    
+    {
+    "id": 17,
+    "titulo": "Aprimorar segurança",
+    "descricao": "Harden endpoints e headers",
+    "responsavel": "Felipe Castro",
+    "status": "ATRASADO",
+    "dataCriacao": "2025-12-12T14:30:00",
+    "dataAtualizacao": "2025-12-13T14:30:00",
+    "dataLimite": "2026-04-12T14:30:00"
+    }
+]
+
+```
+<div style="font-size:1.2em; font-weight:700; color:#006400">✅ Correção prevista: Este bug será corrigido na próxima release.</div>
+---
 ## ✨ Funcionalidades
 - **Listar tarefa**
 - **Criar tarefa**
@@ -138,7 +210,7 @@ services:
 ---
 
 **Faça uma requisição post http://localhost:8080/api/auth/login com o body abaixo, depois copie o JWT e 
-faça requisições no end-points /tarefas.**
+faça as requisições necessárias no end-points /tarefas.**
 ```
 {
   "nome": "facilit",
@@ -147,20 +219,19 @@ faça requisições no end-points /tarefas.**
 ```
 
 ## ✨ End-Points
-
-| Método | Nome do endpoint     | Descrição                                                                           |
-|--------|----------------------|-------------------------------------------------------------------------------------|
-| POST   | /api/auth/login      | Login na api, obrigatório para todos end-points o token JWT.                        | 
-| POST   | /tarefas             | Cria uma nova tarefa.                                                               |
-| GET    | /tarefas             | Buscar todas tarefas registradas.                                                   | 
-| GET    | /tarefas/id/{id}     | Consulte informações de uma tarefa através de um``id`` .                            | 
-| GET    | /tarefas/titulo      | Consulte informações de uma tarefa através de um``titulo``.                         |  
-| GET    | /tarefas/descricao   | Consulte informações de uma tarefa através de uma``descricao``.                     |  
-| GET    | /tarefas/status      | Buscar todas tarefas registrados por um ``status``.                                 |  
-| PATCH  | /tarefas/id/{id}     | Atualiza uma ou mais informação de uma determinada tarefa  pelo ``id``.             | 
-| PATCH  | /tarefas/titulo      | Atualiza uma ou mais informação de uma determinada tarefa  pelo``titulo``.          | 
-| PATCH  | /tarefas/descricao   | Atualiza uma ou mais informação de uma determinada tarefa  pela``descricao``.       | 
-| PATCH  | /tarefas/status/{id} | Atualiza campo status uma determinada tarefa pelo``id``, passando status atualizado. | 
+| Método | Nome do endpoint     | Descrição                                                                            |
+|--------|----------------------|--------------------------------------------------------------------------------------|
+| POST   | /api/auth/login      | Login na api, obrigatório para todos end-points o token JWT.                         | 
+| POST   | /tarefas             | Cria uma nova tarefa.                                                                |
+| GET    | /tarefas             | Buscar todas tarefas registradas.                                                    | 
+| GET    | /tarefas/id/{id}     | Consulte informações de uma tarefa através de um `id`.                              | 
+| GET    | /tarefas/titulo      | Consulte informações de uma tarefa através de um `titulo`.                          |  
+| GET    | /tarefas/descricao   | Consulte informações de uma tarefa através de uma `descricao`.                      |  
+| ~~GET~~| ~~/tarefas/status~~  | ~~Buscar todas tarefas registrados por um `status`.~~                                |  
+| PATCH  | /tarefas/id/{id}     | Atualiza uma ou mais informação de uma determinada tarefa pelo `id`.                | 
+| PATCH  | /tarefas/titulo      | Atualiza uma ou mais informação de uma determinada tarefa pelo `titulo`.            | 
+| PATCH  | /tarefas/descricao   | Atualiza uma ou mais informação de uma determinada tarefa pela `descricao`.         | 
+| PATCH  | /tarefas/status/{id} | Atualiza campo status uma determinada tarefa pelo `id`, passando status atualizado. |
 
 ---
 ##  Decisões técnicas
