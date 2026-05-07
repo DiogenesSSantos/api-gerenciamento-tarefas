@@ -87,7 +87,10 @@ Content-Type: application/json
 
 ```
 <div style="font-size:1.2em; font-weight:700; color:#006400">✅ Correção prevista: Este bug será corrigido na próxima release.</div>
+
 ---
+
+
 ## ✨ Funcionalidades
 - **Listar tarefa**
 - **Criar tarefa**
