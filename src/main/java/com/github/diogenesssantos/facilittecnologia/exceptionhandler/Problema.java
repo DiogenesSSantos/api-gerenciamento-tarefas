@@ -1,4 +1,4 @@
-package com.github.diogenesssantos.facilittecnologia.exceptionhandller;
+package com.github.diogenesssantos.facilittecnologia.exceptionhandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

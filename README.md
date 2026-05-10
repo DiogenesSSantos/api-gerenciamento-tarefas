@@ -18,79 +18,6 @@ Aplicação backend para gerenciamento de tarefas (To‑Do). Permite criar taref
 
 ---
 
-
-<div style="font-size:2.0em; font-weight:800; color:#b22222">⚠️ ALERTA</div>
-
-## Aviso Importante sobre o Endpoint /tarefas/status
-
-**Status:** **Aconselhável não utilização do endpoint** bug crítico conflitando dados.
-
-**Descrição:** O endpoint **GET /tarefas/status** apresenta um comportamento incorreto que está ocasionando respostas inconsistentes. Enquanto investigamos e corrigimos o problema, **não utilize** este endpoint em produção.
-
----
-
-### Comportamento durante a investigação
-- **Resposta:** O endpoint retornará **HTTP 200** com um corpo não correspondente ao status desejado explicando o motivo.
-- **Logs:** Logs internos foram ativados para rastrear chamadas e facilitar a correção.
-
----
-
-### Exemplo de resposta ao requisitar buscar por status FAZER, comportamento altera para atrasado tarefas que ja passaram da dataLimite.
-```json
-HTTP/1.1 200
-Content-Type: application/json
-
-[
-    {
-    "id": 1,
-    "titulo": "Facilit",
-    "descricao": "Descrição teste A",
-    "responsavel": "Diógenes Silva",
-    "status": "ATRASADO",
-    "dataCriacao": "2025-11-01T09:00:00",
-    "dataAtualizacao": "2025-11-01T09:00:00",
-    "dataLimite": "2026-01-01T09:00:00"
-    },
-    
-    {
-    "id": 6,
-    "titulo": "Teste de integração",
-    "descricao": "Criar testes para endpoints críticos",
-    "responsavel": "Beatriz Lima",
-    "status": "FAZER",
-    "dataCriacao": "2026-03-01T09:45:00",
-    "dataAtualizacao": "2026-03-01T09:45:00",
-    "dataLimite": "2026-09-01T09:45:00"
-    },
-    {
-    "id": 9,
-    "titulo": "Análise de performance",
-    "descricao": "Identificar gargalos de consulta",
-    "responsavel": "Pedro Henrique",
-    "status": "FAZER",
-    "dataCriacao": "2026-01-05T07:30:00",
-    "dataAtualizacao": "2026-01-06T08:00:00",
-    "dataLimite": "2026-06-01T07:30:00"
-    },
-    
-    {
-    "id": 17,
-    "titulo": "Aprimorar segurança",
-    "descricao": "Harden endpoints e headers",
-    "responsavel": "Felipe Castro",
-    "status": "ATRASADO",
-    "dataCriacao": "2025-12-12T14:30:00",
-    "dataAtualizacao": "2025-12-13T14:30:00",
-    "dataLimite": "2026-04-12T14:30:00"
-    }
-]
-
-```
-<div style="font-size:1.2em; font-weight:700; color:#006400">✅ Correção prevista: Este bug será corrigido na próxima release.</div>
-
----
-
-
 ## ✨ Funcionalidades
 - **Listar tarefa**
 - **Criar tarefa**
@@ -134,20 +61,94 @@ Content-Type: application/json
 ## 📐 Arquitetura do Projeto - em construção.
 ```tree
 src/
- ├── main/
- │   ├── java/
- │   │   └── com/github/diogenesssantos/facilittecnologia
- │   │       ├── assembler/
- │   │       |   |──AssemblerTarefa
- │   │       |
- │   │      
- │   │
- │   └── resources/
- │       ├── application.yml
- │       └── (outros arquivos de configuração, mapeamentos, etc.)
- │
- └── test/
-     └── java/....
+├ ── main/
+│    ├── java/
+│    │   └── com/github/diogenesssantos/facilittecnologia
+│    │       ├── assembler/
+│    │       |           └──AssemblerTarefa
+│    │       |
+│    │       |   
+│    │       ├── configuration/
+|    |       |   ├── documentacao/
+|    |       |   |               └── OpenApiConfig
+|    |       |   ├── security/
+|    |       |   |           └── JwtAuthenticationFilter
+|    |       |   |           └── JwtUil
+|    |       |   |           └── RestAuthenticationEntryPoint
+|    |       |   |           └── RoleBasedAuthSucessHandler
+|    |       |   ├── web/
+|    |       |          └── TarefaResponse
+|    |       |
+|    |       |
+|    |       ├── controller/
+|    |       |   ├── request/
+|    |       |   |          └── TarefaRequest
+|    |       |   ├── response/
+|    |       |   |           └── TarefaResponse
+|    |       |   |
+|    |       |   └── LoginController
+|    |       |   └── TarefaController
+|    |       |
+|    |       |
+|    |       ├── docs/
+|    |       |       └── LoginDocumentacaoOpenAPI
+|    |       |       └── LoginRepresentacaoOpenAPI
+|    |       |       └── TarefaDocumentacaoOpenAPI
+|    |       |       └── TarefaRepresentacaoOpenAPI
+|    |       |
+|    |       ├── exception/
+|    |       |            └── BuilderTarefaException
+|    |       |            └── CampoInvalidoException
+|    |       |            └── TarefaNaoLocalizada
+|    |       |
+|    |       ├── exceptionHandler/
+|    |       |                   └── ExceptionHandlerGlobal
+|    |       |                   └── Problema
+|    |       |
+|    |       |
+|    |       ├── model/
+|    |       |        └── RoneName
+|    |       |        └── Status
+|    |       |        └── Tarefa
+|    |       |        └── Usuario
+|    |       |
+|    |       |
+|    |       ├── repository/
+|    |       |             └── TarefaRepository
+|    |       |             └── TarefaRepositoryCustom
+|    |       |             └── TarefaRepository
+|    |       |             └── UsuarioRepository
+|    |       |
+|    |       |
+|    |       ├── service/
+|    |       |          └── JpaUsuarioService
+|    |       |          └── TarefaService
+|    |       |          └── UsuarioService
+|    |       |
+|    |       ├── util/
+|    |       |       └── ValidaHoraUtil
+|    |       |
+|    |       ├── start        
+|    |       
+│    └── resources/
+│       ├── application.yml
+│       ├── db/migration/
+|                       └── scripts-flyway
+|                      
+│
+└── test/
+|    └── java/....
+|    |      └── com/github/diogenesssantos/facilittecnologia
+|    |          ├── config/
+|    |          |         └── TestIntegrationConfig
+|    |          |
+|    |          └── TarefaControllerTest
+|    |          └── TarefaRepositoryTest
+|    |          └── TarefaServiceTest
+|    |          └── TarefaUnitario
+|    |
+|    |
+_________________________________________________________________________________
 ```
 
 ---
@@ -165,7 +166,7 @@ src/
 
 **docker**
 ```
-docker run -p 8080:8080 diogenesssantos/facilittecnologia:1.0
+docker run -p 8080:8080 diogenesssantos/facilittecnologia:1.0.1
 ```
 
 **maven**
@@ -173,16 +174,6 @@ docker run -p 8080:8080 diogenesssantos/facilittecnologia:1.0
 ./mvnw clean package
 java -jar target/facilittecnologia-1.0.jar
 
-```
-**docker-compose**
-```
-version: '3.8'
-services:
-  app:
-    image: diogenesssantos/facilittecnologia:1.0
-    ports:
-      - "8080:8080"
- 
 ```
 
 **test**
@@ -222,18 +213,18 @@ faça as requisições necessárias no end-points /tarefas.**
 ```
 
 ## ✨ End-Points
-| Método | Nome do endpoint     | Descrição                                                                            |
-|--------|----------------------|--------------------------------------------------------------------------------------|
-| POST   | /api/auth/login      | Login na api, obrigatório para todos end-points o token JWT.                         | 
-| POST   | /tarefas             | Cria uma nova tarefa.                                                                |
-| GET    | /tarefas             | Buscar todas tarefas registradas.                                                    | 
-| GET    | /tarefas/id/{id}     | Consulte informações de uma tarefa através de um `id`.                              | 
-| GET    | /tarefas/titulo      | Consulte informações de uma tarefa através de um `titulo`.                          |  
-| GET    | /tarefas/descricao   | Consulte informações de uma tarefa através de uma `descricao`.                      |  
-| ~~GET~~| ~~/tarefas/status~~  | ~~Buscar todas tarefas registrados por um `status`.~~                                |  
-| PATCH  | /tarefas/id/{id}     | Atualiza uma ou mais informação de uma determinada tarefa pelo `id`.                | 
-| PATCH  | /tarefas/titulo      | Atualiza uma ou mais informação de uma determinada tarefa pelo `titulo`.            | 
-| PATCH  | /tarefas/descricao   | Atualiza uma ou mais informação de uma determinada tarefa pela `descricao`.         | 
+| Método | Nome do endpoint     | Descrição                                                                         |
+|--------|----------------------|-----------------------------------------------------------------------------------|
+| POST   | /api/auth/login      | Login na api, obrigatório para todos end-points o token JWT.                      | 
+| POST   | /tarefas             | Cria uma nova tarefa.                                                             |
+| GET    | /tarefas             | Buscar todas tarefas registradas.                                                 | 
+| GET    | /tarefas/id/{id}     | Consulte informações de uma tarefa através de um `id`.                            | 
+| GET    | /tarefas/titulo      | Consulte informações de uma tarefa através de um `titulo`.                        |  
+| GET    | /tarefas/descricao   | Consulte informações de uma tarefa através de uma `descricao`.                    |  
+| GET    | /tarefas/status      | Buscar todas tarefas registrados por um `status`.                                 |  
+| PATCH  | /tarefas/id/{id}     | Atualiza uma ou mais informação de uma determinada tarefa pelo `id`.              | 
+| PATCH  | /tarefas/titulo      | Atualiza uma ou mais informação de uma determinada tarefa pelo `titulo`.          | 
+| PATCH  | /tarefas/descricao   | Atualiza uma ou mais informação de uma determinada tarefa pela `descricao`.       | 
 | PATCH  | /tarefas/status/{id} | Atualiza campo status uma determinada tarefa pelo `id`, passando status atualizado. |
 
 ---

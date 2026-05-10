@@ -1,21 +1,16 @@
-package com.github.diogenesssantos.facilittecnologia.exceptionhandller;
+package com.github.diogenesssantos.facilittecnologia.exceptionhandler;
 
 import com.github.diogenesssantos.facilittecnologia.exception.CampoInvalidoException;
 import com.github.diogenesssantos.facilittecnologia.exception.TarefaNaoLocalizadaException;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestControllerAdvice

@@ -324,20 +324,17 @@ public class TarefaServiceTest {
         var statusAFazerExpectativa = Status.FAZER;
 
 
-        given(mockRepository.buscarPorStatus(any(Status.class)))
+        given(mockRepository.findAll())
                 .willAnswer(invocation -> {
-                    Status statusParametro = invocation.getArgument(0);
-
                     return mockListTarefas.stream()
-                            .filter(tarefa -> tarefa.getStatus().equals(statusParametro))
+                            .filter(tarefa -> tarefa.getStatus().equals(statusAFazerExpectativa))
                             .toList();
                 });
 
 
         var listaTarefaAFazerBD = mockService.buscarPorStatus(statusAFazerExpectativa);
 
-        then(mockRepository).should().buscarPorStatus(any(Status.class));
-        assertNotNull(listaTarefaAFazerBD);
+        then(mockRepository).should().findAll();
         assertFalse(listaTarefaAFazerBD.isEmpty());
 
     }
@@ -348,19 +345,11 @@ public class TarefaServiceTest {
     void deve_Retornar_Uma_Lista_De_Tarefas_Vazia_Quando_buscarPorStatus_Nao_Existir_O_Status_No_Banco_De_Dados() {
         var statusAFazerExpectativa = Status.CONCLUIDO;
 
-        given(mockRepository.buscarPorStatus(any(Status.class)))
-                .willAnswer(invocation -> {
-                    Status statusParametro = invocation.getArgument(0);
-
-                    return mockListTarefas.stream()
-                            .filter(tarefa -> tarefa.getStatus().equals(statusParametro))
-                            .toList();
-                });
+        given(mockRepository.findAll()).willReturn(List.of());
 
         var listaTarefaAFazerBD = mockService.buscarPorStatus(statusAFazerExpectativa);
 
-        then(mockRepository).should().buscarPorStatus(any(Status.class));
-        assertNotNull(listaTarefaAFazerBD);
+        then(mockRepository).should().findAll();
         assertTrue(listaTarefaAFazerBD.isEmpty());
 
     }

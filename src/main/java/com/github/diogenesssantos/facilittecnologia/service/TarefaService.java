@@ -98,9 +98,6 @@ public class TarefaService {
 
     public List<Tarefa> buscarPorStatus(Status status) {
         List<Tarefa> tarefasBD = buscarTodas();
-        tarefasBD.stream()
-                .filter(tarefa -> tarefa.getStatus() == status)
-                .toList();
 
         return tarefasBD.stream()
                 .filter(tarefa -> tarefa.getStatus() == status)
