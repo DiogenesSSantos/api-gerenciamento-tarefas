@@ -172,8 +172,7 @@ docker run -p 8080:8080 diogenesssantos/facilittecnologia:1.0.1
 **maven**
 ```
 ./mvnw clean package
-java -jar target/facilittecnologia-1.0.jar
-
+java -jar target/api-gerenciamento-tarefas-1.0.0.jar
 ```
 
 **test**
