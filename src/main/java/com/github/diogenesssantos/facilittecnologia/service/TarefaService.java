@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TarefaService {
@@ -30,27 +29,39 @@ public class TarefaService {
     }
 
     public List<Tarefa> buscarTodas() {
-        return repository.findAll();
+        var listaTarefas = repository.findAll();
+        for (Tarefa tarefa : listaTarefas) {
+            atualizaStatusTarefaAtrasada(tarefa);
+        }
+
+        return listaTarefas;
     }
 
 
     public Tarefa buscarPorId(Long id) {
         if (id == null) throw new IllegalArgumentException("O campo id não pode ser nulo");
-
-        return repository.findById(id).orElseThrow(
+        var tarefa = repository.findById(id).orElseThrow(
                 () -> new TarefaNaoLocalizadaException(
                         String.format("A tarefa com o id [%s] não existe no banco de dados.", id), "id"));
+        atualizaStatusTarefaAtrasada(tarefa);
+
+        return tarefa;
+
     }
 
 
     public Tarefa buscarPorTitulo(String titulo) {
         if (titulo == null) throw new IllegalArgumentException("O campo titulo não pode ser nulo");
 
-        return repository.buscarPorTitulo(titulo)
+        var tarefa = repository.buscarPorTitulo(titulo)
                 .orElseThrow(() ->
                         new TarefaNaoLocalizadaException(
                                 String.format("A tarefa com o titulo [%s] não existe no banco de dados.", titulo),
                                 "titulo"));
+
+        atualizaStatusTarefaAtrasada(tarefa);
+
+        return tarefa;
 
     }
 
@@ -58,11 +69,14 @@ public class TarefaService {
     public Tarefa buscarPorDescricao(String descricao) {
         if (descricao == null) throw new IllegalArgumentException("O campo descrição não pode ser nulo");
 
-        return repository.buscarPorDescricao(descricao)
+        var tarefa = repository.buscarPorDescricao(descricao)
                 .orElseThrow(() ->
-                        new TarefaNaoLocalizadaException(String.format("A tarefa com o descrição [%s] " +
-                                "não existe no banco de dados.", descricao), "descricao"));
+                        new TarefaNaoLocalizadaException(
+                                String.format("A tarefa com o titulo [%s] não existe no banco de dados.", descricao),
+                                "titulo"));
 
+        atualizaStatusTarefaAtrasada(tarefa);
+        return tarefa;
     }
 
 
@@ -71,16 +85,26 @@ public class TarefaService {
             throw new IllegalArgumentException("O campo descrição não pode ser nulo");
         }
 
-        return repository.buscarPorTituloEDescricao(titulo, descricao)
+        var tarefa =  repository.buscarPorTituloEDescricao(titulo, descricao)
                 .orElseThrow(() ->
-                new TarefaNaoLocalizadaException(String.format("A tarefa associada titulo e descricao " +
-                        "não existe no banco de dados.", ""), "titulo e descricao"));
+                        new TarefaNaoLocalizadaException(String.format("A tarefa associada titulo e descricao " +
+                                "não existe no banco de dados.", ""), "titulo e descricao"));
+
+        atualizaStatusTarefaAtrasada(tarefa);
+
+        return tarefa;
     }
 
 
     public List<Tarefa> buscarPorStatus(Status status) {
+        List<Tarefa> tarefasBD = buscarTodas();
+        tarefasBD.stream()
+                .filter(tarefa -> tarefa.getStatus() == status)
+                .toList();
 
-        return repository.buscarPorStatus(status);
+        return tarefasBD.stream()
+                .filter(tarefa -> tarefa.getStatus() == status)
+                .toList();
 
     }
 
@@ -100,5 +124,11 @@ public class TarefaService {
         return salvar(tarefaBD);
     }
 
+
+    private static void atualizaStatusTarefaAtrasada(Tarefa tarefa) {
+        if (ValidaHoraUtil.isPassado(tarefa.getDataLimite()) && tarefa.getStatus() != Status.CONCLUIDO) {
+            tarefa.setStatus(Status.ATRASADO);
+        }
+    }
 
 }
