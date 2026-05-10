@@ -86,7 +86,7 @@ Content-Type: application/json
 ]
 
 ```
-<div style="font-size:1.2em; font-weight:700; color:#006400">✅ Corrigida nova versão disponível <a href="https://github.com/DiogenesSSantos/api-gerenciamento-tarefas/tree/bugfix/corrigindo-comportamento-buscar-por-status-e-alterar-por-status"> veja </a>.</div>
+<div style="font-size:1.2em; font-weight:700; color:#006400">✅ Corrigida nova versão disponível 1.0.1 <a href="https://github.com/DiogenesSSantos/api-gerenciamento-tarefas/tree/bugfix/corrigindo-comportamento-buscar-por-status-e-alterar-por-status"> veja </a>.</div>
 
 ---
 
