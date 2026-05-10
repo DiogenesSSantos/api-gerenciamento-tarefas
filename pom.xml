@@ -12,9 +12,9 @@
     </parent>
 
     <groupId>com.github.diogenesssantos.facilittecnologia</groupId>
-    <artifactId>api-gerenciamento-tarefas</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>api-gerenciamento-tarefas</name>
+    <artifactId>api-gerenciamento-tarefas-facilittecnologia</artifactId>
+    <version>1.0.0</version>
+    <name>api-gerenciamento-tarefas-facilittecnologia</name>
 
     <properties>
         <java.version>21</java.version>

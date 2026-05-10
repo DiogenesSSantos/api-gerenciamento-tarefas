@@ -86,7 +86,7 @@ Content-Type: application/json
 ]
 
 ```
-<div style="font-size:1.2em; font-weight:700; color:#006400">✅ Correção prevista: Este bug será corrigido na próxima release.</div>
+<div style="font-size:1.2em; font-weight:700; color:#006400">✅ Corrigida nova versão disponível <a href="https://github.com/DiogenesSSantos/api-gerenciamento-tarefas/tree/bugfix/corrigindo-comportamento-buscar-por-status-e-alterar-por-status"> veja </a>.</div>
 
 ---
 
@@ -131,23 +131,96 @@ Content-Type: application/json
 
 ---
 
-## 📐 Arquitetura do Projeto - em construção.
-```tree
-src/
- ├── main/
- │   ├── java/
- │   │   └── com/github/diogenesssantos/facilittecnologia
- │   │       ├── assembler/
- │   │       |   |──AssemblerTarefa
- │   │       |
- │   │      
- │   │
- │   └── resources/
- │       ├── application.yml
- │       └── (outros arquivos de configuração, mapeamentos, etc.)
- │
- └── test/
-     └── java/....
+## 📐 Arquitetura do Projeto
+```src/
+├ ── main/
+│    ├── java/
+│    │   └── com/github/diogenesssantos/facilittecnologia
+│    │       ├── assembler/
+│    │       |           └──AssemblerTarefa
+│    │       |
+│    │       |   
+│    │       ├── configuration/
+|    |       |   ├── documentacao/
+|    |       |   |               └── OpenApiConfig
+|    |       |   ├── security/
+|    |       |   |           └── JwtAuthenticationFilter
+|    |       |   |           └── JwtUil
+|    |       |   |           └── RestAuthenticationEntryPoint
+|    |       |   |           └── RoleBasedAuthSucessHandler
+|    |       |   ├── web/
+|    |       |          └── TarefaResponse
+|    |       |
+|    |       |
+|    |       ├── controller/
+|    |       |   ├── request/
+|    |       |   |          └── TarefaRequest
+|    |       |   ├── response/
+|    |       |   |           └── TarefaResponse
+|    |       |   |
+|    |       |   └── LoginController
+|    |       |   └── TarefaController
+|    |       |
+|    |       |
+|    |       ├── docs/
+|    |       |       └── LoginDocumentacaoOpenAPI
+|    |       |       └── LoginRepresentacaoOpenAPI
+|    |       |       └── TarefaDocumentacaoOpenAPI
+|    |       |       └── TarefaRepresentacaoOpenAPI
+|    |       |
+|    |       ├── exception/
+|    |       |            └── BuilderTarefaException
+|    |       |            └── CampoInvalidoException
+|    |       |            └── TarefaNaoLocalizada
+|    |       |
+|    |       ├── exceptionHandler/
+|    |       |                   └── ExceptionHandlerGlobal
+|    |       |                   └── Problema
+|    |       |
+|    |       |
+|    |       ├── model/
+|    |       |        └── RoneName
+|    |       |        └── Status
+|    |       |        └── Tarefa
+|    |       |        └── Usuario
+|    |       |
+|    |       |
+|    |       ├── repository/
+|    |       |             └── TarefaRepository
+|    |       |             └── TarefaRepositoryCustom
+|    |       |             └── TarefaRepository
+|    |       |             └── UsuarioRepository
+|    |       |
+|    |       |
+|    |       ├── service/
+|    |       |          └── JpaUsuarioService
+|    |       |          └── TarefaService
+|    |       |          └── UsuarioService
+|    |       |
+|    |       ├── util/
+|    |       |       └── ValidaHoraUtil
+|    |       |
+|    |       ├── start        
+|    |       
+│    └── resources/
+│       ├── application.yml
+│       ├── db/migration/
+|                       └── scripts-flyway
+|                      
+│
+└── test/
+|    └── java/....
+|    |      └── com/github/diogenesssantos/facilittecnologia
+|    |          ├── config/
+|    |          |         └── TestIntegrationConfig
+|    |          |
+|    |          └── TarefaControllerTest
+|    |          └── TarefaRepositoryTest
+|    |          └── TarefaServiceTest
+|    |          └── TarefaUnitario
+|    |
+|    |
+_________________________________________________________________________________
 ```
 
 ---
@@ -165,13 +238,13 @@ src/
 
 **docker**
 ```
-docker run -p 8080:8080 diogenesssantos/facilittecnologia:1.0
+docker run -p 8080:8080 diogenesssantos/facilittecnologia:1.0.0
 ```
 
 **maven**
 ```
 ./mvnw clean package
-java -jar target/facilittecnologia-1.0.jar
+java -jar target/api-gerenciamento-tarefas-facilittecnologia-1.0.0.jar
 
 ```
 **docker-compose**
@@ -179,7 +252,7 @@ java -jar target/facilittecnologia-1.0.jar
 version: '3.8'
 services:
   app:
-    image: diogenesssantos/facilittecnologia:1.0
+    image: diogenesssantos/facilittecnologia:1.0.0
     ports:
       - "8080:8080"
  
