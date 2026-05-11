@@ -24,7 +24,7 @@ public class OpenApiConfig {
                                 .description("api-rest criada para o desafio técnico - " +
                                         "Estágio em Desenvolvimento de Software " +
                                         "Facilit Tecnologia.")
-                                .version("1.0.0")
+                                .version("1.0.1")
                                 .contact(new Contact().url("https://diogenesssantos.github.io/meu-portfolio/")
                                         .name("Diogenes S Santos").email("diogenescontatoofficial@hotmail.com"))
                                 .summary("Gerenciador de tarefas")
@@ -33,7 +33,7 @@ public class OpenApiConfig {
                                         .url("https://opensource.org/licenses/MIT")))
                 .externalDocs(new ExternalDocumentation()
                         .description("GitHub")
-                        .url("https://github.com/DiogenesSSantos/api-gerenciamento-tarefas"))
+                        .url("https://github.com/DiogenesSSantos/api-gerenciamento-tarefas/tree/bugfix/corrigindo-comportamento-buscar-por-status-e-alterar-por-status"))
                 .components(new Components()
                         .addSecuritySchemes(SECURITY_SCHEME_NAME,
                                 new SecurityScheme()

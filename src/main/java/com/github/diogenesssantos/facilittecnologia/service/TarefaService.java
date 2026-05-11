@@ -107,14 +107,14 @@ public class TarefaService {
 
 
     @Transactional
-    public Tarefa atualizar(Tarefa tarefaBD, TarefaRequestDTO tarefaRequestDTO) {
-        if (tarefaRequestDTO.titulo() != null) tarefaBD.setTitulo(tarefaRequestDTO.titulo());
-        if (tarefaRequestDTO.descricao() != null) tarefaBD.setDescricao(tarefaRequestDTO.descricao());
-        if (tarefaRequestDTO.responsavel() != null) tarefaBD.setResponsavel(tarefaRequestDTO.responsavel());
-        if (tarefaRequestDTO.status() != null) tarefaBD.setStatus(tarefaRequestDTO.status());
-        if (tarefaRequestDTO.dataLimite() != null) {
-            ValidaHoraUtil.futuroOuThrows(tarefaRequestDTO.dataLimite());
-            tarefaBD.setDataLimite(tarefaRequestDTO.dataLimite());
+    public Tarefa atualizar(Tarefa tarefaBD, TarefaRequestDTO trDTO) {
+        if (trDTO.titulo() != null && !trDTO.titulo().isBlank()) tarefaBD.setTitulo(trDTO.titulo());
+        if (trDTO.descricao() != null && !trDTO.descricao().isBlank()) tarefaBD.setDescricao(trDTO.descricao());
+        if (trDTO.responsavel() != null && !trDTO.responsavel().isBlank()) tarefaBD.setResponsavel(trDTO.responsavel());
+        if (trDTO.status() != null) tarefaBD.setStatus(trDTO.status());
+        if (trDTO.dataLimite() != null) {
+            ValidaHoraUtil.futuroOuThrows(trDTO.dataLimite());
+            tarefaBD.setDataLimite(trDTO.dataLimite());
         }
         tarefaBD.setDataAtualizacao(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
